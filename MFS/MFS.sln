@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFS", "MFS\MFS.csproj", "{25A013EC-0540-40AE-A729-F00AE8A5CB4C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25A013EC-0540-40AE-A729-F00AE8A5CB4C}.Debug|x86.ActiveCfg = Debug|x86
+		{25A013EC-0540-40AE-A729-F00AE8A5CB4C}.Debug|x86.Build.0 = Debug|x86
+		{25A013EC-0540-40AE-A729-F00AE8A5CB4C}.Release|x86.ActiveCfg = Release|x86
+		{25A013EC-0540-40AE-A729-F00AE8A5CB4C}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FDB359EE-26AC-479F-A3B1-3E85BFDC50B6}
+	EndGlobalSection
+EndGlobal
