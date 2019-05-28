@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Font/Text.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font/Text.spritefont
+
 #begin Images/AnimatedSprites/mani-idle-run.png
 /importer:TextureImporter
 /processor:TextureProcessor

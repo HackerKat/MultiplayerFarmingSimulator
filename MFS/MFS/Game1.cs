@@ -9,6 +9,8 @@ namespace MFS
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteManager spriteManager;
+
+        SpriteFont text;
         
         public Game1()
         {
@@ -27,6 +29,8 @@ namespace MFS
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            text = Content.Load<SpriteFont>(@"font\text");
         }
 
         protected override void UnloadContent()
@@ -45,7 +49,13 @@ namespace MFS
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
+
+            spriteBatch.Begin();
+            //Draw font
+            spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Black,
+                0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }
