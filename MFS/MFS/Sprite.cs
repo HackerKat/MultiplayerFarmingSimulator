@@ -1,17 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace MFS {
-    abstract class Sprite
+    public abstract class Sprite
     {
-        Texture2D textureImage;
+        private Texture2D textureImage;
         protected Point frameSize;
-        Point currentFrame;
-        Point sheetSize;
-        int collisionOffset;
-        int timeSinceLastFrame = 0;
-        int millisecondsPerFrame;
-        const int defaultMillisecondsPerFrame = 16;
+        private Point currentFrame;
+        protected Point sheetSize;
+        private int collisionOffset;
+        private int timeSinceLastFrame = 0;
+        private int millisecondsPerFrame;
+        const int defaultMillisecondsPerFrame = 100;
         protected Vector2 speed;
         protected Vector2 position;
 
@@ -46,6 +47,29 @@ namespace MFS {
             this.sheetSize = sheetSize;
             this.speed = speed;
             this.millisecondsPerFrame = millisecondsPerFrame;
+        }
+
+
+        public List<Texture2D> CropTiles()
+        {
+            List<Texture2D> textureList = new List<Texture2D>();
+            int xSprite = 0;
+            int ySprite = 0;
+            Rectangle newBounds = new Rectangle(xSprite, ySprite, frameSize.X, frameSize.Y);
+
+            while (xSprite < textureImage.Width && ySprite < textureImage.Height)
+            {
+                Texture2D croppedTexture = new Texture2D(textureImage.GraphicsDevice, frameSize.X, frameSize.Y);
+                Color[] data = new Color[frameSize.X * frameSize.Y];
+                textureImage.GetData(0, newBounds, data, 0, newBounds.Width * newBounds.Width);
+                croppedTexture.SetData(data);
+
+                textureList.Add(croppedTexture);
+
+                xSprite += frameSize.X;
+                ySprite += frameSize.Y;
+            }
+            return textureList;
         }
 
         public virtual void Update (GameTime gameTime, Rectangle clientBounds)

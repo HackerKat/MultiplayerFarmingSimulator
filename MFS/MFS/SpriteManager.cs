@@ -9,7 +9,11 @@ namespace MFS
     {
         SpriteBatch spriteBatch;
         UserControlledSprite player;
+        BackgroundSprite background;
+
+
         List<Sprite> spriteList = new List<Sprite>();
+        
 
         public SpriteManager(Game game)
         : base (game)
@@ -34,6 +38,16 @@ namespace MFS
             spriteList.Add(new AutomatedSprite(
                 Game.Content.Load<Texture2D>(@"Images/sensei"), new Vector2(300, 150), new Point(16, 23), 5, new Point(0, 0),
                 new Point(1, 1), Vector2.Zero));
+
+            //background
+            Sprite backgroundSprite = new BackgroundSprite(Game.Content.Load<Texture2D>(@"Images/background"), Vector2.Zero, new Point(16, 16), 0, new Point(0, 0),
+                new Point(11, 2), Vector2.Zero);
+            List<Texture2D> tiles = backgroundSprite.CropTiles();
+            foreach (Texture2D t in tiles)
+            {
+                spriteList.Add(new BackgroundSprite(t, Vector2.Zero, new Point(16, 16), 0, new Point(0, 0),
+                new Point(1, 1), Vector2.Zero));
+            }
 
             base.LoadContent();
         }
