@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace MFS
@@ -53,11 +54,11 @@ namespace MFS
             {
                 prop.Update(gameTime, Game.Window.ClientBounds);
 
-                ////check for collision
-                //if (s.collisionRect.Intersects(player.collisionRect))
-                //{
-                //    Game.Exit();
-                //}
+                //check for collision
+                if (prop.CollisionRect.Intersects(player.CollisionRect))
+                {
+                    Game.Exit();
+                }
             }
 
             base.Update(gameTime);

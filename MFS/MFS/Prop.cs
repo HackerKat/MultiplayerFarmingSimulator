@@ -9,6 +9,13 @@ namespace MFS
         private Sprite propSprite;
         private Rectangle collisionRect;
         private Vector2 position;
+        public Rectangle CollisionRect
+        {
+            get
+            {
+                return collisionRect;
+            }
+        }
 
         public Prop(Sprite propSprite, Vector2 position)
         {
@@ -33,6 +40,9 @@ namespace MFS
                 position.Y = clientBounds.Height - collisionRect.Height;
 
             propSprite.Animate(gameTime);
+
+            collisionRect.X = (int)position.X;
+            collisionRect.Y = (int)position.Y;
         }
 
         public void Draw(SpriteBatch spriteBatch)
