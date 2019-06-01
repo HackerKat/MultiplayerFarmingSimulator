@@ -3,36 +3,43 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 namespace MFS {
-    public abstract class Sprite
+    public class Sprite
     {
         private Texture2D textureImage;
-        protected Point frameSize;
-        protected Point sheetSize;
-        protected Vector2 position;
+        private Point sheetSize;
         private int millisecondsPerFrame;
+        private Point currentFrame;
+        private Point frameSize;
+        private int timeSinceLastFrame = 0;
+
+        public Point FrameSize
+        {
+            get
+            {
+                return frameSize;
+            }
+        }
 
         //for non-animated sprites
-        public Sprite (Texture2D textureImage, Vector2 position, Point frameSize) 
-            : this(textureImage, position, frameSize, new Point(1, 1), 0)
+        public Sprite(Texture2D textureImage, Point frameSize)
+            : this(textureImage, frameSize, new Point(1, 1), 0)
         {
         }
 
         //for animated sprites
-        public Sprite(Texture2D textureImage, Vector2 position, Point frameSize, Point sheetSize, int millisecondsPerFrame)
+        public Sprite(Texture2D textureImage, Point frameSize, Point sheetSize, int millisecondsPerFrame)
         {
             this.textureImage = textureImage;
-            this.position = position;
             this.frameSize = frameSize;
             this.sheetSize = sheetSize;
             this.millisecondsPerFrame = millisecondsPerFrame;
+            currentFrame = new Point(0, 0);
         }
 
         public void Animate(GameTime gameTime)
         {
             if (sheetSize != new Point(1, 1))
             {
-                int timeSinceLastFrame = 0;
-                Point currentFrame = new Point(0, 0);
                 timeSinceLastFrame += gameTime.ElapsedGameTime.Milliseconds;
                 if (timeSinceLastFrame > millisecondsPerFrame)
                 {
@@ -49,5 +56,17 @@ namespace MFS {
             }
         }
 
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            spriteBatch.Draw(textureImage, position,
+                new Rectangle(currentFrame.X * frameSize.X,
+                currentFrame.Y * frameSize.Y,
+                frameSize.X,
+                frameSize.Y),
+                Color.White, 0, Vector2.Zero,
+                1f, SpriteEffects.None, 0
+                );
+        }
+        
     }
 }

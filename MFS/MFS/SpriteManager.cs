@@ -7,48 +7,39 @@ namespace MFS
     //with XNA it should be Microsoft.Xna.Framework.DrawableGameComponent
     public class SpriteManager : DrawableGameComponent
     {
-        SpriteBatch spriteBatch;
-        UserControlledSprite player;
-        BackgroundSprite background;
-
-
-        List<Sprite> spriteList = new List<Sprite>();
-        
+        private SpriteBatch spriteBatch;
+        private Player player;
+        private List <Prop> props;
 
         public SpriteManager(Game game)
         : base (game)
         {
+            props = new List<Prop>();
         }
+
+
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
             //player
-            player = new UserControlledSprite(
-                Game.Content.Load<Texture2D>(@"Images/AnimatedSprites/mani-idle-run"), Vector2.Zero,
-                new Point(24, 24), 5, new Point(0, 0), new Point(7, 1), new Vector2(6, 6));
+            Sprite playerSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/AnimatedSprites/mani-idle-run"), 
+                                            new Point(24, 24), new Point(7, 1), 5);
+
+            player = new Player(playerSprite, new Vector2(100, 100));
 
             //rock
-            spriteList.Add(new AutomatedSprite(
-                Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock04"), new Vector2(150, 150), new Point(26, 15), 5, new Point(0, 0),
-                new Point(1, 1), Vector2.Zero));
+            Sprite rockSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock04"),
+                                            new Point(26, 15));
+
+            props.Add(new Prop(rockSprite, new Vector2(150, 150)));
 
             //sensei
-            spriteList.Add(new AutomatedSprite(
-                Game.Content.Load<Texture2D>(@"Images/sensei"), new Vector2(300, 150), new Point(16, 23), 5, new Point(0, 0),
-                new Point(1, 1), Vector2.Zero));
-
-            //background
-            Sprite backgroundSprite = new BackgroundSprite(Game.Content.Load<Texture2D>(@"Images/background"), Vector2.Zero, new Point(16, 16), 0, new Point(0, 0),
-                new Point(11, 2), Vector2.Zero);
-            List<Texture2D> tiles = backgroundSprite.CropTiles();
-            foreach (Texture2D t in tiles)
-            {
-                spriteList.Add(new BackgroundSprite(t, Vector2.Zero, new Point(16, 16), 0, new Point(0, 0),
-                new Point(1, 1), Vector2.Zero));
-            }
-
+            //spriteList.Add(new AutomatedSprite(
+            //    Game.Content.Load<Texture2D>(@"Images/sensei"), new Vector2(300, 150), new Point(16, 23), 5, new Point(0, 0),
+            //    new Point(1, 1), Vector2.Zero));
+            
             base.LoadContent();
         }
 
@@ -58,15 +49,15 @@ namespace MFS
             player.Update(gameTime, Game.Window.ClientBounds);
 
             //Update all automated sprites
-            foreach(Sprite s in spriteList)
+            foreach(Prop prop in props)
             {
-                s.Update(gameTime, Game.Window.ClientBounds);
+                prop.Update(gameTime, Game.Window.ClientBounds);
 
-                //check for collision
-                if (s.collisionRect.Intersects(player.collisionRect))
-                {
-                    Game.Exit();
-                }
+                ////check for collision
+                //if (s.collisionRect.Intersects(player.collisionRect))
+                //{
+                //    Game.Exit();
+                //}
             }
 
             base.Update(gameTime);
@@ -77,12 +68,12 @@ namespace MFS
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
             //draw player
-            player.Draw(gameTime, spriteBatch);
+            player.Draw(spriteBatch);
 
             //draw all automated sprites
-            foreach (Sprite s in spriteList)
+            foreach (Prop prop in props)
             {
-                s.Draw(gameTime, spriteBatch);
+                prop.Draw(spriteBatch);
             }
 
             spriteBatch.End();
