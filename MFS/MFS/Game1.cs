@@ -6,17 +6,19 @@ namespace MFS
 {
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        EntityManager entityManager;
-        SpriteManager spriteManager;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private EntityManager entityManager;
+        private SpriteManager spriteManager;
+        private World world;
 
-        SpriteFont text;
+        private SpriteFont text;
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
         }
 
         protected override void Initialize()
@@ -24,6 +26,7 @@ namespace MFS
             spriteManager = SpriteManager.Instance;
             entityManager = EntityManager.Instance;
             spriteManager.Game = this;
+            world = new World(this.Window.ClientBounds);
 
             base.Initialize();
         }
@@ -40,6 +43,9 @@ namespace MFS
             entityManager.AddEntity(player);
             entityManager.AddEntity(rock01);
             entityManager.AddEntity(rock02);
+
+            world.LoadTiles();
+            world.GenerateWorld();
 
             text = Content.Load<SpriteFont>(@"font\text");
         }
@@ -66,6 +72,8 @@ namespace MFS
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+
+            world.Draw(spriteBatch);
 
             entityManager.Draw(spriteBatch);
 

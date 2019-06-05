@@ -9,6 +9,18 @@ namespace MFS {
         private Point sheetSize;
         private int millisecondsPerFrame;
         private Point currentFrame;
+        public Point CurrentFrame
+        {
+            get
+            {
+                return currentFrame;
+            }
+            set
+            {
+                currentFrame = value;
+            }
+        }
+
         private Point frameSize;
         private int timeSinceLastFrame = 0;
 

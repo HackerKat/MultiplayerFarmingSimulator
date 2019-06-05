@@ -49,7 +49,7 @@ namespace MFS
                                             new Point(26, 15));
             
             //backgroundID3
-            Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/backgroundSheet2"), new Point(11, 2), new Point(16, 16), 0);
+            Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/backgroundSheet2"), new Point(16, 16), new Point(11, 2), 0);
 
 
             sprites.Add(playerSprite);
