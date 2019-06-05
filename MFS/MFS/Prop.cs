@@ -4,11 +4,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MFS
 {
-    public class Prop
+    public class Prop : Entity
     {
-        private Sprite propSprite;
         private Rectangle collisionRect;
-        private Vector2 position;
         public Rectangle CollisionRect
         {
             get
@@ -17,18 +15,18 @@ namespace MFS
             }
         }
 
-        public Prop(Sprite propSprite, Vector2 position)
+        public Prop (Vector2 position, ushort spriteID)
+            : base (position, spriteID)
         {
-            this.propSprite = propSprite;
-            this.position = position;
+            Sprite propSprite = SpriteManager.Instance.GetSprite(spriteID);
+
             collisionRect = new Rectangle((int)position.X, (int)position.Y,
                             propSprite.FrameSize.X, propSprite.FrameSize.Y);
         }
-
-
-
-        public void Update(GameTime gameTime, Rectangle clientBounds)
+        
+        public override void Update(GameTime gameTime, Rectangle clientBounds)
         {
+            Sprite propSprite = SpriteManager.Instance.GetSprite(spriteID);
             //bounds check
             if (position.X < 0)
                 position.X = 0;
@@ -45,8 +43,10 @@ namespace MFS
             collisionRect.Y = (int)position.Y;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
+            Sprite propSprite = SpriteManager.Instance.GetSprite(spriteID);
+
             propSprite.Draw(spriteBatch, position);
         }
     }

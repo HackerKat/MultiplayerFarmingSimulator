@@ -41,6 +41,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BackgroundSprite.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="EntityManager.cs" />
+    <Compile Include="NetworkManager.cs" />
     <Compile Include="Prop.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Player.cs" />

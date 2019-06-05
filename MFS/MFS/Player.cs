@@ -4,10 +4,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MFS
 {
-    public class Player
+    public class Player : Entity
     {
-        private Sprite playerSprite;
-        private Vector2 position;
         private Rectangle collisionRect;
         public Rectangle CollisionRect
         {
@@ -17,10 +15,11 @@ namespace MFS
             }
         }
 
-        public Player(Sprite playerSprite, Vector2 position)
+        public Player(Vector2 position, ushort spriteID) 
+            : base (position, spriteID)
         {
-            this.playerSprite = playerSprite;
-            this.position = position;
+            Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
+
             collisionRect = new Rectangle((int)position.X, (int)position.Y,
                              playerSprite.FrameSize.X, playerSprite.FrameSize.Y);
         }
@@ -52,8 +51,26 @@ namespace MFS
             return inputDirection;
         }
 
-        public void Update(GameTime gameTime, Rectangle clientBounds)
+        public string Serialize()
         {
+            string plyrPacket;
+
+            plyrPacket = position.X + ":" + position.Y;
+
+            return plyrPacket;
+        }
+
+        public void Deserialize(string data)
+        {
+            string[] elements = data.Split(':');
+            //id = short.Parse(elements[0]);
+            position.X = float.Parse(elements[1]);
+            position.Y = float.Parse(elements[2]);
+        }
+
+        public override void Update(GameTime gameTime, Rectangle clientBounds)
+        {
+            Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
             position += InputHandle();
 
             //bounds check
@@ -65,8 +82,9 @@ namespace MFS
             collisionRect.Y = (int)position.Y;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
+            Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
             playerSprite.Draw(spriteBatch, position);
         }
     }

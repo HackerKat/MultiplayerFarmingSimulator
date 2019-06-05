@@ -6,80 +6,61 @@ using System.Collections.Generic;
 namespace MFS
 {
     //with XNA it should be Microsoft.Xna.Framework.DrawableGameComponent
-    public class SpriteManager : DrawableGameComponent
+    public class SpriteManager
     {
-        private SpriteBatch spriteBatch;
-        private Player player;
-        private List <Prop> props;
-
-        public SpriteManager(Game game)
-        : base (game)
+        public static SpriteManager Instance
         {
-            props = new List<Prop>();
+            get
+            {
+                if(instance == null)
+                {
+                    instance = new SpriteManager();
+                }
+                return instance;
+            }
+        }
+        private static SpriteManager instance;
+
+        private SpriteBatch spriteBatch;
+        private List <Sprite> sprites;
+        public Game Game
+        {
+            get;
+            set;
         }
 
-
-
-        protected override void LoadContent()
+        private SpriteManager()
         {
-            spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            sprites = new List<Sprite>();
+        }
+        
+        public void LoadContent()
+        {
+            //playerID0
+            Sprite playerSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/AnimatedSprites/mani-idle-run"),
+                                             new Point(24, 24), new Point(7, 1), 5);
 
-            //player
-            Sprite playerSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/AnimatedSprites/mani-idle-run"), 
-                                            new Point(24, 24), new Point(7, 1), 5);
-
-            player = new Player(playerSprite, new Vector2(100, 100));
-
-            //rock
-            Sprite rockSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock04"),
+            //rock04ID1
+            Sprite rockSprite01 = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock04"),
                                             new Point(26, 15));
 
-            props.Add(new Prop(rockSprite, new Vector2(150, 150)));
-
-            //sensei
-            //spriteList.Add(new AutomatedSprite(
-            //    Game.Content.Load<Texture2D>(@"Images/sensei"), new Vector2(300, 150), new Point(16, 23), 5, new Point(0, 0),
-            //    new Point(1, 1), Vector2.Zero));
+            //rock05ID2
+            Sprite rockSprite02 = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock05"),
+                                            new Point(26, 15));
             
-            base.LoadContent();
+            //backgroundID3
+            Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/backgroundSheet2"), new Point(11, 2), new Point(16, 16), 0);
+
+
+            sprites.Add(playerSprite);
+            sprites.Add(rockSprite01);
+            sprites.Add(rockSprite02);
+            sprites.Add(bckgr);
         }
 
-        public override void Update(GameTime gameTime)
+        public Sprite GetSprite (ushort spriteID)
         {
-            //Update player
-            player.Update(gameTime, Game.Window.ClientBounds);
-
-            //Update all automated sprites
-            foreach(Prop prop in props)
-            {
-                prop.Update(gameTime, Game.Window.ClientBounds);
-
-                //check for collision
-                if (prop.CollisionRect.Intersects(player.CollisionRect))
-                {
-                    Game.Exit();
-                }
-            }
-
-            base.Update(gameTime);
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-
-            //draw player
-            player.Draw(spriteBatch);
-
-            //draw all automated sprites
-            foreach (Prop prop in props)
-            {
-                prop.Draw(spriteBatch);
-            }
-
-            spriteBatch.End();
-
-            base.Draw(gameTime);
+            return sprites[spriteID];
         }
     }
 }
