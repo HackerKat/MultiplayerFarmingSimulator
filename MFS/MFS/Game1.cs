@@ -20,9 +20,11 @@ namespace MFS
         private NetworkManager networkManager;
         private SpriteFont text;
         private GameState state;
+        private string hostname;
         
-        public Game1()
+        public Game1(string hostname)
         {
+            this.hostname = hostname;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
@@ -72,7 +74,7 @@ namespace MFS
             }
             if (Keyboard.GetState().IsKeyDown(Keys.C))
             {
-                networkManager.Connect();
+                networkManager.Connect(hostname);
                 state = GameState.GAMEPLAY;
             }
         }

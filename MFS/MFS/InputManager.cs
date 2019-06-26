@@ -11,11 +11,21 @@ namespace MFS
     public class InputManager
     {
         //private KeyboardState keyState;
-
-      
-        public InputManager()
+        public static InputManager Instance
         {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new InputManager();
+                }
+                return instance;
+            }
+        }
+        private static InputManager instance;
 
+        private InputManager()
+        {
         }
 
         public Vector2 InputHandle()

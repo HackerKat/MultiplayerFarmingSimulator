@@ -23,6 +23,8 @@ namespace MFS
 
             collisionRect = new Rectangle((int)position.X, (int)position.Y,
                              playerSprite.FrameSize.X, playerSprite.FrameSize.Y);
+
+            inputManager = InputManager.Instance;
         }
 
         private void BoundsCheck(Rectangle clientBounds)
@@ -39,26 +41,8 @@ namespace MFS
 
         private Vector2 Input()
         {
-            inputManager = new InputManager();
             return inputManager.InputHandle();
         }
-
-        //public string Serialize()
-        //{
-        //    string plyrPacket;
-
-        //    plyrPacket = position.X + ":" + position.Y;
-
-        //    return plyrPacket;
-        //}
-
-        //public void Deserialize(string data)
-        //{
-        //    string[] elements = data.Split(':');
-        //    //id = short.Parse(elements[0]);
-        //    position.X = float.Parse(elements[1]);
-        //    position.Y = float.Parse(elements[2]);
-        //}
 
         public override void Update(GameTime gameTime, Rectangle clientBounds)
         {

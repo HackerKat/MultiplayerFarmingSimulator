@@ -15,6 +15,7 @@ namespace MFS
         private NetClient client;
         private NetConnection connectionToHost;
         private bool connected;
+        private bool clientInitialized;
 
         public NetworkManager(int port)
         {
@@ -31,14 +32,13 @@ namespace MFS
             isHost = true;
         }
 
-        public void Connect()
+        public void Connect(string hostname)
         {
             NetPeerConfiguration clientConfig = new NetPeerConfiguration("MFS");
             clientConfig.EnableMessageType(NetIncomingMessageType.Data);
             client = new NetClient(clientConfig);
             client.Start();
-            connectionToHost = client.Connect("127.0.0.1", config.Port);
-            //Console.WriteLine(config.Port);
+            connectionToHost = client.Connect(hostname, config.Port);
 
             if (connectionToHost == null)
             {
@@ -48,10 +48,10 @@ namespace MFS
 
             isHost = false;
             connected = true;
+            clientInitialized = false;
             Thread.Sleep(500);
             NetOutgoingMessage hello = client.CreateMessage();
             hello.Write("Hello");
-            //Console.WriteLine("Hello was sent");
             client.SendMessage(hello, NetDeliveryMethod.ReliableOrdered);
         }
 
@@ -70,7 +70,6 @@ namespace MFS
             #region Server
             if (isHost)
             {
-                //Console.WriteLine("I am host");
                 while ((msg = server.ReadMessage()) != null)
                 {
                     switch (msg.MessageType)
@@ -93,7 +92,6 @@ namespace MFS
                                 else if (type == "Hello")
                                 {
                                     NetworkPlayer netPlayer = new NetworkPlayer(new Microsoft.Xna.Framework.Vector2(200,200), 0);
-                                    Console.WriteLine("Hello incomming");
 
                                     NetOutgoingMessage outMsg = server.CreateMessage();
                                     var entities = EntityManager.Instance.GetAllEntities();
@@ -114,13 +112,18 @@ namespace MFS
 
                                     Console.WriteLine(outMsg);
                                     server.SendMessage(outMsg, msg.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+
+                                    outMsg = server.CreateMessage();
+                                    outMsg.Write("AddPlayer");
+                                    outMsg.Write(netPlayerID);
+                                    netPlayer.PackPacket(outMsg);
+                                    server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
                                 }
                             }
                             break;
                     }
                     server.Recycle(msg);
                 }
-                //foreach (var element in EntityManager.Instance.GetAllEntities())
                 {
                     ushort id = EntityManager.Instance.PlayerID;
                     Entity entity = EntityManager.Instance.GetEntity(id);
@@ -143,11 +146,21 @@ namespace MFS
                         case NetIncomingMessageType.Data:
                             {
                                 string type = msg.ReadString();
-                                if (type == "PositionUpdate")
+                                if (type == "PositionUpdate" && clientInitialized)
                                 {
                                     ushort id = msg.ReadUInt16();
                                     Entity entity = EntityManager.Instance.GetEntity(id);
                                     entity.UnpackPacket(msg);
+                                }
+                                if (type == "AddPlayer")
+                                {
+                                    NetworkPlayer newPlayer = new NetworkPlayer(new Vector2(100, 100), 0);
+                                    ushort id = msg.ReadUInt16();
+                                    if (id != EntityManager.Instance.PlayerID)
+                                    {
+                                        newPlayer.UnpackPacket(msg);
+                                        EntityManager.Instance.AddEntity(newPlayer, id);
+                                    }
                                 }
                                 else if (type == "InitialSetup")
                                 {
@@ -183,6 +196,7 @@ namespace MFS
                                     
                                     EntityManager.Instance.AddEntity(player, netid);
                                     EntityManager.Instance.PlayerID = netid;
+                                    clientInitialized = true;
                                 }
                             }
                             break;

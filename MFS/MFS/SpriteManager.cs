@@ -21,7 +21,6 @@ namespace MFS
         }
         private static SpriteManager instance;
 
-        private SpriteBatch spriteBatch;
         private List <Sprite> sprites;
         public Game Game
         {

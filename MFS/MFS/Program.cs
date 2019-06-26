@@ -12,9 +12,15 @@ namespace MFS
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            using (var game = new Game1())
+            string hostname = "127.0.0.1";
+            if (args.Length == 1)
+            {
+                hostname = args[0];
+            }
+
+            using (var game = new Game1(hostname))
                 game.Run();
         }
     }
