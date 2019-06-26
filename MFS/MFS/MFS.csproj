@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="InputManager.cs" />
     <Compile Include="NetworkPlayer.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Entity.cs" />

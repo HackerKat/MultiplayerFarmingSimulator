@@ -14,6 +14,7 @@ namespace MFS
                 return collisionRect;
             }
         }
+        private InputManager inputManager;
 
         public Player(Vector2 position, ushort spriteID) 
             : base (position, spriteID)
@@ -36,42 +37,33 @@ namespace MFS
                 position.Y = clientBounds.Height - collisionRect.Height;
         }
 
-        private Vector2 InputHandle()
+        private Vector2 Input()
         {
-            Vector2 inputDirection = Vector2.Zero;
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                inputDirection.X -= 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                inputDirection.X += 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                inputDirection.Y -= 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                inputDirection.Y += 1;
-
-            return inputDirection;
+            inputManager = new InputManager();
+            return inputManager.InputHandle();
         }
 
-        public string Serialize()
-        {
-            string plyrPacket;
+        //public string Serialize()
+        //{
+        //    string plyrPacket;
 
-            plyrPacket = position.X + ":" + position.Y;
+        //    plyrPacket = position.X + ":" + position.Y;
 
-            return plyrPacket;
-        }
+        //    return plyrPacket;
+        //}
 
-        public void Deserialize(string data)
-        {
-            string[] elements = data.Split(':');
-            //id = short.Parse(elements[0]);
-            position.X = float.Parse(elements[1]);
-            position.Y = float.Parse(elements[2]);
-        }
+        //public void Deserialize(string data)
+        //{
+        //    string[] elements = data.Split(':');
+        //    //id = short.Parse(elements[0]);
+        //    position.X = float.Parse(elements[1]);
+        //    position.Y = float.Parse(elements[2]);
+        //}
 
         public override void Update(GameTime gameTime, Rectangle clientBounds)
         {
             Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
-            position += InputHandle();
+            position += Input();
 
             //bounds check
             BoundsCheck(clientBounds);

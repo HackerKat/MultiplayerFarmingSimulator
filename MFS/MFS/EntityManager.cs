@@ -46,15 +46,17 @@ namespace MFS
 
         public ushort AddEntity(Entity entity, bool isPlayer)
         {
-            entities.Add(lastID, entity);
+            ushort entityID = lastID;
+            entities.Add(entityID, entity);
+            
             lastID++;
 
             if (isPlayer)
             {
-                PlayerID = lastID;
+                PlayerID = entityID;
             }
 
-            return lastID;
+            return entityID;
         }
 
         public ushort AddEntity(Entity entity, ushort id)
