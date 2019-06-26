@@ -49,5 +49,10 @@ namespace MFS
 
             propSprite.Draw(spriteBatch, position);
         }
+
+        public override string GetEntityType()
+        {
+            return "prop";
+        }
     }
 }

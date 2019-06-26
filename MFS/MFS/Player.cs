@@ -87,5 +87,10 @@ namespace MFS
             Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
             playerSprite.Draw(spriteBatch, position);
         }
+
+        public override string GetEntityType()
+        {
+            return "player";
+        }
     }
 }

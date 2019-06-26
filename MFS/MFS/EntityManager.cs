@@ -26,6 +26,13 @@ namespace MFS
 
         private Dictionary<ushort, Entity> entities;
 
+        public ushort PlayerID
+        {
+            get;
+            set;
+        }
+
+
         private EntityManager()
         {
             entities = new Dictionary<ushort, Entity>();
@@ -34,9 +41,28 @@ namespace MFS
 
         public ushort AddEntity(Entity entity)
         {
-            entities.Add(lastID, entity);
-            return lastID++;
+            return AddEntity(entity, false);
         }
+
+        public ushort AddEntity(Entity entity, bool isPlayer)
+        {
+            entities.Add(lastID, entity);
+            lastID++;
+
+            if (isPlayer)
+            {
+                PlayerID = lastID;
+            }
+
+            return lastID;
+        }
+
+        public ushort AddEntity(Entity entity, ushort id)
+        {
+            entities.Add(id, entity);
+            return id;
+        }
+
 
         public Entity GetEntity(ushort entityID)
         {
@@ -55,6 +81,11 @@ namespace MFS
             }
         }
 
+        public List<KeyValuePair<ushort, Entity>> GetAllEntities()
+        {
+            return entities.ToList();
+        }
+
         public void Update(GameTime gameTime, Rectangle clientBounds)
         {
             foreach(Entity ent in entities.Values)
@@ -69,6 +100,11 @@ namespace MFS
             {
                 ent.Draw(spriteBatch);
             }
+        }
+
+        public void Clear()
+        {
+            entities.Clear();
         }
     }
 }

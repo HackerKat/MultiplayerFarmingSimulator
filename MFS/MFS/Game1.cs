@@ -6,19 +6,25 @@ namespace MFS
 {
     public class Game1 : Game
     {
+        public enum GameState
+        {
+            MAINMENU,
+            GAMEPLAY
+        };
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private EntityManager entityManager;
         private SpriteManager spriteManager;
         private World world;
-
+        private NetworkManager networkManager;
         private SpriteFont text;
+        private GameState state;
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
         }
 
         protected override void Initialize()
@@ -27,6 +33,8 @@ namespace MFS
             entityManager = EntityManager.Instance;
             spriteManager.Game = this;
             world = new World(this.Window.ClientBounds);
+            networkManager = new NetworkManager(666);
+            state = GameState.MAINMENU;
 
             base.Initialize();
         }
@@ -54,20 +62,39 @@ namespace MFS
         {
             // TODO: Unload any non ContentManager content here
         }
-        
-        protected override void Update(GameTime gameTime)
+
+        private void updateMainMenu()
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            {
+                networkManager.Host();
+                state = GameState.GAMEPLAY;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.C))
+            {
+                networkManager.Connect();
+                state = GameState.GAMEPLAY;
+            }
+        }
+
+        private void drawMainMenu()
+        {
+
+        }
+
+        private void updateGameplay(GameTime gameTime)
+        {
+           
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             Rectangle clientBounds = this.Window.ClientBounds;
 
             entityManager.Update(gameTime, clientBounds);
-            
-            base.Update(gameTime);
+            networkManager.Update();
         }
 
-        protected override void Draw(GameTime gameTime)
+        private void drawGameplay()
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -81,7 +108,35 @@ namespace MFS
             spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Black,
                 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             spriteBatch.End();
+        }
 
+
+        protected override void Update(GameTime gameTime)
+        {
+            switch (state)
+            {
+                case GameState.MAINMENU:
+                    updateMainMenu();
+                    break;
+                case GameState.GAMEPLAY:
+                    updateGameplay(gameTime);
+                    break;
+            }
+
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            switch (state)
+            {
+                case GameState.MAINMENU:
+                    drawMainMenu();
+                    break;
+                case GameState.GAMEPLAY:
+                    drawGameplay();
+                    break;
+            }
             base.Draw(gameTime);
         }
     }

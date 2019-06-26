@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Lidgren.Network;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Lidgren.Network.Xna;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +24,17 @@ namespace MFS
         public abstract void Update(GameTime gameTime, Rectangle clientBounds);
 
         public abstract void Draw(SpriteBatch spriteBatch);
+
+        public abstract string GetEntityType();
+
+        public virtual void PackPacket(NetOutgoingMessage msgToFill)
+        {
+            msgToFill.Write(position);
+        }
+
+        public virtual void UnpackPacket(NetIncomingMessage msgToRead)
+        {
+            position = msgToRead.ReadVector2();
+        }
     }
 }
