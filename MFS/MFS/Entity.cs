@@ -13,6 +13,17 @@ namespace MFS
     public abstract class Entity
     {
         protected Vector2 position;
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+            }
+        }
         protected ushort spriteID;
 
         public Entity(Vector2 position, ushort spriteID)

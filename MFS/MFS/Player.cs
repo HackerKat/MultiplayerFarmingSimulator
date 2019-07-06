@@ -39,15 +39,9 @@ namespace MFS
                 position.Y = clientBounds.Height - collisionRect.Height;
         }
 
-        private Vector2 Input()
-        {
-            return inputManager.InputHandle();
-        }
-
         public override void Update(GameTime gameTime, Rectangle clientBounds)
         {
             Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
-            position += Input();
 
             //bounds check
             BoundsCheck(clientBounds);

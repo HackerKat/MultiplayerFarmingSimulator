@@ -50,7 +50,11 @@ namespace MFS
             Prop rock01 = new Prop(new Vector2(200, 100), 1);
             Prop rock02 = new Prop(new Vector2(50, 50), 2);
 
-            entityManager.AddEntity(player);
+            ushort entityID;
+
+            entityID = entityManager.AddEntity(player);
+            InputManager.Instance.EntityToControlID = entityID;
+
             entityManager.AddEntity(rock01);
             entityManager.AddEntity(rock02);
 
@@ -62,7 +66,7 @@ namespace MFS
 
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+           
         }
 
         private void updateMainMenu()
@@ -86,7 +90,7 @@ namespace MFS
 
         private void updateGameplay(GameTime gameTime)
         {
-           
+            InputManager.Instance.HandleInput();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 

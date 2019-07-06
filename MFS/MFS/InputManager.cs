@@ -10,6 +10,11 @@ namespace MFS
 {
     public class InputManager
     {
+        public ushort EntityToControlID
+        {
+            get;
+            set;
+        }
         //private KeyboardState keyState;
         public static InputManager Instance
         {
@@ -28,8 +33,10 @@ namespace MFS
         {
         }
 
-        public Vector2 InputHandle()
+        public void HandleInput()
         {
+            Entity entity = EntityManager.Instance.GetEntity(EntityToControlID);
+            
             //keyState = Keyboard.GetState();
             Vector2 inputDirection = Vector2.Zero;
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
@@ -41,7 +48,7 @@ namespace MFS
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 inputDirection.Y += 1;
 
-            return inputDirection;
+            entity.Position += inputDirection;
         }
 
     }
