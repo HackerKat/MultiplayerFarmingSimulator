@@ -41,12 +41,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Button.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="InputManager.cs" />
+    <Compile Include="NetworkManager.cs" />
     <Compile Include="NetworkPlayer.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityManager.cs" />
-    <Compile Include="NetworkManager.cs" />
     <Compile Include="Prop.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Player.cs" />

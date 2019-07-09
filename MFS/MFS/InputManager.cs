@@ -37,7 +37,6 @@ namespace MFS
         {
             Entity entity = EntityManager.Instance.GetEntity(EntityToControlID);
             
-            //keyState = Keyboard.GetState();
             Vector2 inputDirection = Vector2.Zero;
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 inputDirection.X -= 1;

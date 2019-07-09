@@ -35,7 +35,7 @@ namespace MFS
             entityManager = EntityManager.Instance;
             spriteManager.Game = this;
             world = new World(this.Window.ClientBounds);
-            networkManager = new NetworkManager(666);
+            networkManager = NetworkManager.Instance;
             state = GameState.MAINMENU;
 
             base.Initialize();
@@ -71,14 +71,8 @@ namespace MFS
 
         private void updateMainMenu()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            if (networkManager.StartNetwork(hostname))
             {
-                networkManager.Host();
-                state = GameState.GAMEPLAY;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.C))
-            {
-                networkManager.Connect(hostname);
                 state = GameState.GAMEPLAY;
             }
         }
