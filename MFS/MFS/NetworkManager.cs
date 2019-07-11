@@ -44,25 +44,36 @@ namespace MFS
             config.Port = port;
             config.EnableMessageType(NetIncomingMessageType.Data);
         }
-
-        //TODO: Keyboard handle in game1
-        public bool StartNetwork(string hostname)
+        
+        public void StartHost()
         {
-
-            if (Keyboard.GetState().IsKeyDown(Keys.H))
-            {
-                server = new Server(config);
-                server.Host();
-                return true;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.C))
-            {
-                client = new Client(config.Port);
-                client.Connect(hostname);
-                return true;
-            }
-            return false;
+            server = new Server(config);
+            server.Host();
         }
+
+        public void StartClient(string hostname)
+        {
+            client = new Client(config.Port);
+            client.Connect(hostname);
+        }
+
+
+        //public bool StartNetwork(string hostname)
+        //{
+        //    if (Keyboard.GetState().IsKeyDown(Keys.H))
+        //    {
+        //        server = new Server(config);
+        //        server.Host();
+        //        return true;
+        //    }
+        //    else if (Keyboard.GetState().IsKeyDown(Keys.C))
+        //    {
+        //        client = new Client(config.Port);
+        //        client.Connect(hostname);
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         public void Update()
         {

@@ -21,7 +21,9 @@ namespace MFS
         private SpriteFont text;
         private GameState state;
         private string hostname;
-        
+        private Button startHost;
+        private Button startClient;
+
         public Game1(string hostname)
         {
             this.hostname = hostname;
@@ -50,6 +52,8 @@ namespace MFS
             Prop rock01 = new Prop(new Vector2(200, 100), 1);
             Prop rock02 = new Prop(new Vector2(50, 50), 2);
 
+            Texture2D buttonTexture = Content.Load<Texture2D>(@"Images\UI\button3");
+
             ushort entityID;
 
             entityID = entityManager.AddEntity(player);
@@ -61,6 +65,14 @@ namespace MFS
             world.LoadTiles();
             world.GenerateWorld();
 
+            int padding = 10;
+            int centerX = Window.ClientBounds.Width / 2;
+            int centerY = Window.ClientBounds.Height / 2;
+
+
+            startHost = new Button("Host game", centerX - 50, centerY - 40 - padding, 100, 40, StartHost, buttonTexture);
+            startClient = new Button("Connect", centerX - 50, centerY - padding, 100, 40, StartClient, buttonTexture);
+
             text = Content.Load<SpriteFont>(@"font\text");
         }
 
@@ -69,17 +81,29 @@ namespace MFS
            
         }
 
-        private void updateMainMenu()
+        private void UpdateMainMenu()
         {
-            if (networkManager.StartNetwork(hostname))
-            {
-                state = GameState.GAMEPLAY;
-            }
+            startHost.Update();
+            startClient.Update();
         }
 
-        private void drawMainMenu()
+        private void StartHost()
         {
+            networkManager.StartHost();
+            state = GameState.GAMEPLAY;
+        }
 
+        private void StartClient()
+        {
+            networkManager.StartClient(hostname);
+            state = GameState.GAMEPLAY;
+        }
+
+        private void DrawMainMenu()
+        {
+            this.IsMouseVisible = true;
+            startHost.Draw(spriteBatch, text);
+            startClient.Draw(spriteBatch, text);
         }
 
         private void updateGameplay(GameTime gameTime)
@@ -94,12 +118,8 @@ namespace MFS
             networkManager.Update();
         }
 
-        private void drawGameplay()
+        private void DrawGameplay()
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            spriteBatch.Begin();
-
             world.Draw(spriteBatch);
 
             entityManager.Draw(spriteBatch);
@@ -107,7 +127,6 @@ namespace MFS
             //Draw font
             spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Black,
                 0, Vector2.Zero, 1, SpriteEffects.None, 1);
-            spriteBatch.End();
         }
 
 
@@ -116,7 +135,7 @@ namespace MFS
             switch (state)
             {
                 case GameState.MAINMENU:
-                    updateMainMenu();
+                    UpdateMainMenu();
                     break;
                 case GameState.GAMEPLAY:
                     updateGameplay(gameTime);
@@ -128,15 +147,22 @@ namespace MFS
 
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin();
+
             switch (state)
             {
                 case GameState.MAINMENU:
-                    drawMainMenu();
+                    DrawMainMenu();
                     break;
                 case GameState.GAMEPLAY:
-                    drawGameplay();
+                    DrawGameplay();
                     break;
             }
+
+            spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }
