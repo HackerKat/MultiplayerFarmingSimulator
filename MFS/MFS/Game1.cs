@@ -23,11 +23,19 @@ namespace MFS
         private string hostname;
         private Button startHost;
         private Button startClient;
+        private Parser parser;
 
         public Game1(string hostname)
         {
             this.hostname = hostname;
+            string path = @"D:\Documents\University\Bachelor\MultiplayerFarmingSimulator\MFS\MFS\map_1.json";
+            parser = new Parser(path);
             graphics = new GraphicsDeviceManager(this);
+
+            graphics.PreferredBackBufferWidth = parser.GetMapWidth();  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = parser.GetMapHeight();   // set this value to the desired height of your window
+            graphics.ApplyChanges();
+            
             Content.RootDirectory = "Content";
         }
 
@@ -45,12 +53,14 @@ namespace MFS
 
         protected override void LoadContent()
         {
+            
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
             spriteManager.LoadContent();
+            parser.TreeLayer();
             Player player = new Player( new Vector2(100, 100), 0);
-            Prop rock01 = new Prop(new Vector2(200, 100), 1);
-            Prop rock02 = new Prop(new Vector2(50, 50), 2);
+            //Prop rock01 = new Prop(new Vector2(200, 100), 1);
+            //Prop rock02 = new Prop(new Vector2(50, 50), 2);
 
             Texture2D buttonTexture = Content.Load<Texture2D>(@"Images\UI\button3");
 
@@ -59,8 +69,8 @@ namespace MFS
             entityID = entityManager.AddEntity(player);
             InputManager.Instance.EntityToControlID = entityID;
 
-            entityManager.AddEntity(rock01);
-            entityManager.AddEntity(rock02);
+            //entityManager.AddEntity(rock01);
+            //entityManager.AddEntity(rock02);
 
             world.LoadTiles();
             world.GenerateWorld();

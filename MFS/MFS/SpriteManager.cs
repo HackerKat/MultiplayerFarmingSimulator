@@ -50,11 +50,31 @@ namespace MFS
             //backgroundID3
             Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/backgroundSheet"), new Point(16, 16), new Point(11, 2), 0);
 
+            //treealive1ID4
+            Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(64,96));
+
+            //treealive2ID5
+            Sprite treealive2 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive2"), new Point(64,96));
+
+            //treealive3ID6
+            Sprite treealive3 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive3"), new Point(64,96));
+
+            //treestump1ID7
+            Sprite treestump1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treestump1"), new Point(64,96));
+
+            //treedead1ID8
+            Sprite treedead1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treedead1"), new Point(64,96));
+
 
             sprites.Add(playerSprite);
             sprites.Add(rockSprite01);
             sprites.Add(rockSprite02);
             sprites.Add(bckgr);
+            sprites.Add(treealive1);
+            sprites.Add(treealive2);
+            sprites.Add(treealive3);
+            sprites.Add(treestump1);
+            sprites.Add(treedead1);
         }
 
         public Sprite GetSprite (ushort spriteID)

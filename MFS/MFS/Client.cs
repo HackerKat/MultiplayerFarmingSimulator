@@ -42,14 +42,16 @@ namespace MFS
             outMsg.Write((byte)PacketType.HELLO);
             client.SendMessage(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
-
-        public void SendPositionUpdate(NetIncomingMessage msg)
+        
+        public void ReceivePosition(NetIncomingMessage msg)
         {
             ushort id = msg.ReadUInt16();
+            Console.WriteLine("Receive Position from unit:" + id);
             Entity entity = EntityManager.Instance.GetEntity(id);
             if (id != EntityManager.Instance.PlayerID)
             {
                 entity.UnpackPacket(msg);
+                Console.WriteLine("Receive data" + msg);
             }
         }
 
@@ -132,7 +134,7 @@ namespace MFS
                             case PacketType.POSITION_UPDATE:
                                 if (clientInitialized)
                                 {
-                                    SendPositionUpdate(msg);
+                                    ReceivePosition(msg);
                                 }
                                 break;
                             case PacketType.ADD_PLAYER:

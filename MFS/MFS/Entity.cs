@@ -41,11 +41,13 @@ namespace MFS
         public virtual void PackPacket(NetOutgoingMessage msgToFill)
         {
             msgToFill.Write(position);
+            msgToFill.Write(spriteID);
         }
 
         public virtual void UnpackPacket(NetIncomingMessage msgToRead)
         {
             position = msgToRead.ReadVector2();
+            spriteID = msgToRead.ReadUInt16();
         }
     }
 }
