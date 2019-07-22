@@ -91,7 +91,7 @@ namespace MFS
             outMsg.Write((byte)PacketType.POSITION_UPDATE);
             outMsg.Write(id);
             entity.PackPacket(outMsg);
-
+            
             server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
 

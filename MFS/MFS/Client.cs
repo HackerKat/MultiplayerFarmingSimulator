@@ -46,12 +46,10 @@ namespace MFS
         public void ReceivePosition(NetIncomingMessage msg)
         {
             ushort id = msg.ReadUInt16();
-            Console.WriteLine("Receive Position from unit:" + id);
             Entity entity = EntityManager.Instance.GetEntity(id);
             if (id != EntityManager.Instance.PlayerID)
             {
                 entity.UnpackPacket(msg);
-                Console.WriteLine("Receive data" + msg);
             }
         }
 

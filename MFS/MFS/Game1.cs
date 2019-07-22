@@ -67,6 +67,7 @@ namespace MFS
             ushort entityID;
 
             entityID = entityManager.AddEntity(player);
+            EntityManager.Instance.PlayerID = entityID;
             InputManager.Instance.EntityToControlID = entityID;
 
             //entityManager.AddEntity(rock01);
