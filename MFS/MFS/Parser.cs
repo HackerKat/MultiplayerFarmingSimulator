@@ -28,7 +28,7 @@ namespace MFS
         {
             int tileheight = root["tileheight"].Value<int>();
             int height = root["height"].Value<int>();
-
+            
             return height * tileheight;
         }
 
@@ -55,7 +55,9 @@ namespace MFS
                         ushort gid = lobject["gid"].Value<ushort>();
                         int posX = lobject["x"].Value<int>();
                         int posY = lobject["y"].Value<int>();
-                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY), (ushort)(gid + 1)));
+                        int height = lobject["height"].Value<int>();
+                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1)));
+                        
                     }
                 }
             }

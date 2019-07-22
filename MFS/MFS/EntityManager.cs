@@ -44,6 +44,7 @@ namespace MFS
             return AddEntity(entity, false);
         }
 
+        //TODO: delete
         public ushort AddEntity(Entity entity, bool isPlayer)
         {
             ushort entityID = lastID;
@@ -98,10 +99,34 @@ namespace MFS
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Entity ent in entities.Values)
+            List<Entity> entitiesToDraw = entities.Values.ToList();
+            entitiesToDraw.Sort(CompareEntity);
+
+            foreach (Entity ent in entitiesToDraw)
             {
                 ent.Draw(spriteBatch);
+                
+                Console.WriteLine("Entity poitionX: " + ent.Position.X + " Entity poitionY: " + ent.Position.Y);
             }
+        }
+
+        private int CompareEntity(Entity a, Entity b)
+        {
+            int heightA = a.Size.Y;
+            int heightB = b.Size.Y;
+
+            if (a.Position.Y + heightA < b.Position.Y + heightB)
+            {
+                return -1;
+            }
+            else if (a.Position.Y + heightA == b.Position.Y + heightB)
+            {
+                if (a.Position.X < b.Position.X)
+                {
+                    return -1;
+                }
+            }
+            return 1;
         }
 
         public void Clear()

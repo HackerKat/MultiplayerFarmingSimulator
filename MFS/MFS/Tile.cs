@@ -24,7 +24,7 @@ namespace MFS
             SpriteManager spriteManager = SpriteManager.Instance;
             Sprite sprite = spriteManager.GetSprite(spriteID);
             sprite.CurrentFrame = frame;
-            sprite.Draw(spriteBatch, position);
+            sprite.Draw(spriteBatch, position, true);
         }
     }
 }

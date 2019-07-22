@@ -25,11 +25,25 @@ namespace MFS
             }
         }
         protected ushort spriteID;
+        protected Point size;
+        public Point Size
+        {
+            get
+            {
+                return size;
+            }
+            private set
+            {
+                size = value;
+            }
+        }
 
         public Entity(Vector2 position, ushort spriteID)
         {
             this.position = position;
             this.spriteID = spriteID;
+
+            Size = SpriteManager.Instance.GetSprite(spriteID).FrameSize;
         }
         
         public abstract void Update(GameTime gameTime, Rectangle clientBounds);
@@ -42,12 +56,14 @@ namespace MFS
         {
             msgToFill.Write(position);
             msgToFill.Write(spriteID);
+            msgToFill.Write(size);
         }
 
         public virtual void UnpackPacket(NetIncomingMessage msgToRead)
         {
             position = msgToRead.ReadVector2();
             spriteID = msgToRead.ReadUInt16();
+            size = msgToRead.ReadPoint();
         }
     }
 }

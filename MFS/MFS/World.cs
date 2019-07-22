@@ -12,7 +12,7 @@ namespace MFS
     {
         
         private Tile[,] tiles;
-        private const int TILESIZE = 16;
+        private const int TILESIZE = 32;
         private List<Tile> availableTiles;
 
         public World(Rectangle clientBounds)

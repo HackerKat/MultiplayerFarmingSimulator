@@ -48,22 +48,25 @@ namespace MFS
                                             new Point(26, 15));
             
             //backgroundID3
-            Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/backgroundSheet"), new Point(16, 16), new Point(11, 2), 0);
+            Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/grasstiles2"), new Point(32, 32), new Point(2, 1), 0);
 
             //treealive1ID4
-            Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(64,96));
+            Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(64,72));
 
             //treealive2ID5
-            Sprite treealive2 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive2"), new Point(64,96));
+            Sprite treealive2 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive2"), new Point(64, 72));
 
             //treealive3ID6
-            Sprite treealive3 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive3"), new Point(64,96));
+            Sprite treealive3 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive3"), new Point(64, 72));
 
             //treestump1ID7
-            Sprite treestump1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treestump1"), new Point(64,96));
+            Sprite treestump1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treestump1"), new Point(64, 72));
 
             //treedead1ID8
-            Sprite treedead1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treedead1"), new Point(64,96));
+            Sprite treedead1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treedead1"), new Point(64, 72));
+
+            ////treedead1ID9
+            //Sprite treetest = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealiveTEST"), new Point(64, 72));
 
 
             sprites.Add(playerSprite);
@@ -75,6 +78,7 @@ namespace MFS
             sprites.Add(treealive3);
             sprites.Add(treestump1);
             sprites.Add(treedead1);
+            //sprites.Add(treetest);
         }
 
         public Sprite GetSprite (ushort spriteID)

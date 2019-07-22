@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace MFS
 {
@@ -29,10 +30,13 @@ namespace MFS
         {
             this.hostname = hostname;
             string path = @"D:\Documents\University\Bachelor\MultiplayerFarmingSimulator\MFS\MFS\map_1.json";
+            //string path = @"D:\Documents\University\Bachelor\MultiplayerFarmingSimulator\MFS\MFS\testmap.json";
             parser = new Parser(path);
             graphics = new GraphicsDeviceManager(this);
 
             graphics.PreferredBackBufferWidth = parser.GetMapWidth();  // set this value to the desired width of your window
+            Console.WriteLine(parser.GetMapWidth());
+            Console.WriteLine(parser.GetMapHeight());
             graphics.PreferredBackBufferHeight = parser.GetMapHeight();   // set this value to the desired height of your window
             graphics.ApplyChanges();
             
@@ -117,7 +121,7 @@ namespace MFS
             startClient.Draw(spriteBatch, text);
         }
 
-        private void updateGameplay(GameTime gameTime)
+        private void UpdateGameplay(GameTime gameTime)
         {
             InputManager.Instance.HandleInput();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -136,8 +140,8 @@ namespace MFS
             entityManager.Draw(spriteBatch);
 
             //Draw font
-            spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Black,
-                0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Red,
+                0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
 
 
@@ -149,7 +153,7 @@ namespace MFS
                     UpdateMainMenu();
                     break;
                 case GameState.GAMEPLAY:
-                    updateGameplay(gameTime);
+                    UpdateGameplay(gameTime);
                     break;
             }
 

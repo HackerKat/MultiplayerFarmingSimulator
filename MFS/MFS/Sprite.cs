@@ -68,15 +68,26 @@ namespace MFS {
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, bool ignoreDepth = false)
         {
+            float depth = 1 - ((position.Y - frameSize.Y) / 800);
+
+            if (depth < 0)
+            {
+                depth = 0;
+            }
+            else if (depth > 1)
+            {
+                depth = 1;
+            }
+
             spriteBatch.Draw(textureImage, position,
                 new Rectangle(currentFrame.X * frameSize.X,
                 currentFrame.Y * frameSize.Y,
                 frameSize.X,
                 frameSize.Y),
                 Color.White, 0, Vector2.Zero,
-                1f, SpriteEffects.None, 0
+                1f, SpriteEffects.None, ignoreDepth ? 1.0f : depth
                 );
         }
         
