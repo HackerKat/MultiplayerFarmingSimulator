@@ -47,7 +47,9 @@ namespace MFS
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 inputDirection.Y += 1;
 
-            entity.Position += inputDirection;
+            EntityManager.Instance.MoveEntity(EntityToControlID, inputDirection);
+
+            //entity.Position += inputDirection;
         }
 
     }

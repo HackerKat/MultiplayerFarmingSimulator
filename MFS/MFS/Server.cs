@@ -47,7 +47,7 @@ namespace MFS
 
         public void InitialSetup(NetIncomingMessage msg)
         {
-            NetworkPlayer netPlayer = new NetworkPlayer(Vector2.Zero, 0);
+            NetworkPlayer netPlayer = new NetworkPlayer(new Vector2(500, 500), 0);
             NetOutgoingMessage outMsg = server.CreateMessage();
             var entities = EntityManager.Instance.GetAllEntities();
             outMsg.Write((byte)PacketType.INITIAL_SETUP);

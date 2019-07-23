@@ -6,24 +6,13 @@ namespace MFS
 {
     public class Player : Entity
     {
-        private Rectangle collisionRect;
-        public Rectangle CollisionRect
-        {
-            get
-            {
-                return collisionRect;
-            }
-        }
         private InputManager inputManager;
 
         public Player(Vector2 position, ushort spriteID) 
             : base (position, spriteID)
         {
             Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
-
-            collisionRect = new Rectangle((int)position.X, (int)position.Y,
-                             playerSprite.FrameSize.X, playerSprite.FrameSize.Y);
-
+            
             inputManager = InputManager.Instance;
         }
 
@@ -33,17 +22,16 @@ namespace MFS
                 position.X = 0;
             if (position.Y < 0)
                 position.Y = 0;
-            if (position.X > clientBounds.Width - collisionRect.Width)
-                position.X = clientBounds.Width - collisionRect.Width;
-            if (position.Y > clientBounds.Height - collisionRect.Height)
-                position.Y = clientBounds.Height - collisionRect.Height;
+            if (position.X > clientBounds.Width - CollisionRect.Width)
+                position.X = clientBounds.Width - CollisionRect.Width;
+            if (position.Y > clientBounds.Height - CollisionRect.Height)
+                position.Y = clientBounds.Height - CollisionRect.Height;
         }
 
         public override void Update(GameTime gameTime, Rectangle clientBounds)
         {
             Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
-
-            //bounds check
+            
             BoundsCheck(clientBounds);
 
             playerSprite.Animate(gameTime);

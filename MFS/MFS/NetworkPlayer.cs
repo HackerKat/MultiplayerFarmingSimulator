@@ -24,7 +24,9 @@ namespace MFS
 
         public override void Update(GameTime gameTime, Rectangle clientBounds)
         {
-            
+            collisionRect.X = (int)position.X;
+            collisionRect.Y = (int)position.Y;
+
         }
 
         public override string GetEntityType()

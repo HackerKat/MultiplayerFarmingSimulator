@@ -99,7 +99,7 @@ namespace MFS
         public void AddSelf(NetIncomingMessage msg)
         {
             ushort netid = msg.ReadUInt16();
-            Player player = new Player(new Vector2(200, 200), 0);
+            Player player = new Player(new Vector2(500, 500), 0);
 
             EntityManager.Instance.AddEntity(player, netid);
             EntityManager.Instance.PlayerID = netid;

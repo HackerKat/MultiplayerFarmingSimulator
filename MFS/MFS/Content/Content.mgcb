@@ -80,7 +80,7 @@
 /processorParam:TextureFormat=Color
 /build:Images/generic-rpg-rock05.png
 
-#begin Images/sensei.png
+#begin Images/House/House.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -90,7 +90,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/sensei.png
+/build:Images/House/House.png
+
+#begin Images/Plants/tomato.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Plants/tomato.png
 
 #begin Images/Trees/treealive1.png
 /importer:TextureImporter

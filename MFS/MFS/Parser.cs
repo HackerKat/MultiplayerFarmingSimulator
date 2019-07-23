@@ -39,15 +39,16 @@ namespace MFS
             
             return width * tilewidth;
         }
-
-        public void TreeLayer()
+        
+        //TODO: separate method for parsing and entity adding
+        public void ObjectLayer()
         {
             List<JObject> layers = root["layers"].Values<JObject>().ToList();
 
             foreach (JObject layer in layers)
             {
-                string layername = layer["name"].Value<string>();
-                if (layername == "Trees")
+                string name = layer["name"].Value<string>();
+                if (name == "Trees")
                 {
                     List<JObject> layerobjects = layer["objects"].Values<JObject>().ToList();
                     foreach (JObject lobject in layerobjects)
@@ -57,7 +58,30 @@ namespace MFS
                         int posY = lobject["y"].Value<int>();
                         int height = lobject["height"].Value<int>();
                         EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1)));
-                        
+                    }
+                }
+                else if (name == "house")
+                {
+                    List<JObject> layerobjects = layer["objects"].Values<JObject>().ToList();
+                    foreach (JObject lobject in layerobjects)
+                    {
+                        ushort gid = lobject["gid"].Value<ushort>();
+                        int posX = lobject["x"].Value<int>();
+                        int posY = lobject["y"].Value<int>();
+                        int height = lobject["height"].Value<int>();
+                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1)));
+                    }
+                }
+                else if (name == "pickup")
+                {
+                    List<JObject> layerobjects = layer["objects"].Values<JObject>().ToList();
+                    foreach (JObject lobject in layerobjects)
+                    {
+                        //ushort gid = lobject["gid"].Value<ushort>();
+                        int posX = lobject["x"].Value<int>();
+                        int posY = lobject["y"].Value<int>();
+                        int height = lobject["height"].Value<int>();
+                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 10));
                     }
                 }
             }

@@ -105,8 +105,6 @@ namespace MFS
             foreach (Entity ent in entitiesToDraw)
             {
                 ent.Draw(spriteBatch);
-                
-                Console.WriteLine("Entity poitionX: " + ent.Position.X + " Entity poitionY: " + ent.Position.Y);
             }
         }
 
@@ -127,6 +125,81 @@ namespace MFS
                 }
             }
             return 1;
+        }
+
+        public bool CollisionDetection(Entity a, Entity b, out Vector2 offset)
+        {
+            offset = Vector2.Zero;
+            
+            Rectangle aRect = a.CollisionRect;
+            Rectangle bRect = b.CollisionRect;
+
+            if (!aRect.Intersects(bRect))
+            {
+                return false;
+            }
+            Vector2 aHalfExtend = new Vector2(aRect.Width / 2f, aRect.Height / 2f);
+            Vector2 bHalfExtend = new Vector2(bRect.Width / 2f, bRect.Height / 2f);
+
+            Vector2 aCenter = new Vector2(aRect.X + aHalfExtend.X, aRect.Y + aHalfExtend.Y);
+            Vector2 bCenter = new Vector2(bRect.X + bHalfExtend.X, bRect.Y + bHalfExtend.Y);
+
+            Vector2 distance = bCenter - aCenter;
+
+            if(Math.Abs(distance.X) > Math.Abs(distance.Y))
+            {
+                float length = 0f;
+
+                if (distance.X < 0)
+                {
+                    length = (aCenter.X - aHalfExtend.X) - (bCenter.X + bHalfExtend.X);
+                }
+
+                else
+                {
+                    length = (aCenter.X + aHalfExtend.X) - (bCenter.X - bHalfExtend.X);
+                }
+
+                offset.X = length;
+            }
+
+            else
+            {
+                float length = 0f;
+
+                if (distance.Y < 0)
+                {
+                    length = (aCenter.Y - aHalfExtend.Y) - (bCenter.Y + bHalfExtend.Y);
+                }
+
+                else
+                {
+                    length = (aCenter.Y + aHalfExtend.Y) - (bCenter.Y - bHalfExtend.Y);
+                }
+
+                offset.Y = length;
+
+            }
+            return true;
+        }
+
+        public void MoveEntity(ushort id, Vector2 moveVector)
+        {
+            Entity entity = GetEntity(id);
+            entity.Position += moveVector;
+
+            foreach (Entity ent in entities.Values)
+            {
+                if(ent != entity)
+                {
+                    Vector2 offset;
+                    if (CollisionDetection(entity, ent, out offset))
+                    {
+                        entity.Position -= offset;
+                        break;
+                    }
+                }
+            }
         }
 
         public void Clear()

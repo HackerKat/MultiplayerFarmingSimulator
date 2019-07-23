@@ -61,8 +61,8 @@ namespace MFS
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
             spriteManager.LoadContent();
-            parser.TreeLayer();
-            Player player = new Player( new Vector2(100, 100), 0);
+            parser.ObjectLayer();
+            Player player = new Player( new Vector2(300, 300), 0);
             //Prop rock01 = new Prop(new Vector2(200, 100), 1);
             //Prop rock02 = new Prop(new Vector2(50, 50), 2);
 

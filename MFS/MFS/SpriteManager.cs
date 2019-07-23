@@ -39,11 +39,11 @@ namespace MFS
             Sprite playerSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/AnimatedSprites/mani-idle-run"),
                                              new Point(24, 24), new Point(7, 1), 5);
 
-            //rock04ID1
+            ////rock04ID1
             Sprite rockSprite01 = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock04"),
                                             new Point(26, 15));
 
-            //rock05ID2
+            ////rock05ID2
             Sprite rockSprite02 = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock05"),
                                             new Point(26, 15));
             
@@ -59,14 +59,18 @@ namespace MFS
             //treealive3ID6
             Sprite treealive3 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive3"), new Point(64, 72));
 
+            //TODO: Update TreeStump sprite
             //treestump1ID7
             Sprite treestump1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treestump1"), new Point(64, 72));
 
             //treedead1ID8
             Sprite treedead1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treedead1"), new Point(64, 72));
 
-            ////treedead1ID9
-            //Sprite treetest = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealiveTEST"), new Point(64, 72));
+            //houseID9
+            Sprite house = new Sprite(Game.Content.Load<Texture2D>(@"Images/House/House"), new Point(100, 100));
+
+            //tomatoID10
+            Sprite tomato = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/tomato"), new Point(32, 25));
 
 
             sprites.Add(playerSprite);
@@ -78,7 +82,8 @@ namespace MFS
             sprites.Add(treealive3);
             sprites.Add(treestump1);
             sprites.Add(treedead1);
-            //sprites.Add(treetest);
+            sprites.Add(house);
+            sprites.Add(tomato);
         }
 
         public Sprite GetSprite (ushort spriteID)

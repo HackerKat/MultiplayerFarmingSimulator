@@ -35,8 +35,22 @@ namespace MFS
             private set
             {
                 size = value;
+                CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X, size.Y);
             }
         }
+        protected Rectangle collisionRect;
+        public Rectangle CollisionRect
+        {
+            get
+            {
+                return collisionRect;
+            }
+            set
+            {
+                collisionRect = value;
+            }
+        }
+
 
         public Entity(Vector2 position, ushort spriteID)
         {
@@ -44,6 +58,9 @@ namespace MFS
             this.spriteID = spriteID;
 
             Size = SpriteManager.Instance.GetSprite(spriteID).FrameSize;
+            
+            //TODO: add offset
+            CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X, size.Y);
         }
         
         public abstract void Update(GameTime gameTime, Rectangle clientBounds);
@@ -63,7 +80,7 @@ namespace MFS
         {
             position = msgToRead.ReadVector2();
             spriteID = msgToRead.ReadUInt16();
-            size = msgToRead.ReadPoint();
+            Size = msgToRead.ReadPoint();
         }
     }
 }
