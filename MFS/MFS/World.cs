@@ -10,7 +10,6 @@ namespace MFS
 {
     public class World
     {
-        
         private Tile[,] tiles;
         private const int TILESIZE = 32;
         private List<Tile> availableTiles;

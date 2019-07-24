@@ -58,9 +58,9 @@ namespace MFS
             this.spriteID = spriteID;
 
             Size = SpriteManager.Instance.GetSprite(spriteID).FrameSize;
-            
-            //TODO: add offset
-            CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X, size.Y);
+
+            int offset = 10; //gives a more realistic collider box
+            CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X - offset, size.Y - offset);
         }
         
         public abstract void Update(GameTime gameTime, Rectangle clientBounds);

@@ -51,20 +51,19 @@ namespace MFS
             Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/grasstiles2"), new Point(32, 32), new Point(2, 1), 0);
 
             //treealive1ID4
-            Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(64,72));
+            Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(56,64));
 
             //treealive2ID5
-            Sprite treealive2 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive2"), new Point(64, 72));
+            Sprite treealive2 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive2"), new Point(56, 72));
 
             //treealive3ID6
             Sprite treealive3 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive3"), new Point(64, 72));
 
-            //TODO: Update TreeStump sprite
             //treestump1ID7
-            Sprite treestump1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treestump1"), new Point(64, 72));
+            Sprite treestump1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treestump1"), new Point(32, 32));
 
             //treedead1ID8
-            Sprite treedead1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treedead1"), new Point(64, 72));
+            Sprite treedead1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treedead1"), new Point(56, 64));
 
             //houseID9
             Sprite house = new Sprite(Game.Content.Load<Texture2D>(@"Images/House/House"), new Point(100, 100));
