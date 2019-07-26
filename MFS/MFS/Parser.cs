@@ -57,7 +57,7 @@ namespace MFS
                         int posX = lobject["x"].Value<int>();
                         int posY = lobject["y"].Value<int>();
                         int height = lobject["height"].Value<int>();
-                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1)));
+                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1), PropType.SOLID));
                     }
                 }
                 else if (name == "house")
@@ -69,7 +69,7 @@ namespace MFS
                         int posX = lobject["x"].Value<int>();
                         int posY = lobject["y"].Value<int>();
                         int height = lobject["height"].Value<int>();
-                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1)));
+                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1), PropType.SOLID));
                     }
                 }
                 else if (name == "pickup")
@@ -81,7 +81,7 @@ namespace MFS
                         int posX = lobject["x"].Value<int>();
                         int posY = lobject["y"].Value<int>();
                         int height = lobject["height"].Value<int>();
-                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 10));
+                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 10, PropType.PICKUP));
                     }
                 }
             }

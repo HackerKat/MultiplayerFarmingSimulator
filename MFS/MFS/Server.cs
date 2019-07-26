@@ -60,6 +60,11 @@ namespace MFS
 
                 outMsg.Write(id);
                 outMsg.Write(entity.GetEntityType());
+                if (entity is Prop)
+                {
+                    Prop prop = entity as Prop;
+                    outMsg.Write((byte)prop.PropType);
+                }
                 entity.PackPacket(outMsg);
             }
 

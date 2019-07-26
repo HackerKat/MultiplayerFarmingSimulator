@@ -39,30 +39,27 @@ namespace MFS
             lastID = 0;
         }
 
-        public ushort AddEntity(Entity entity)
-        {
-            return AddEntity(entity, false);
-        }
+        //public ushort AddEntity(Entity entity)
+        //{
+        //    return AddEntity(entity, false);
+        //}
 
-        //TODO: delete
-        public ushort AddEntity(Entity entity, bool isPlayer)
+        public ushort AddEntity(Entity entity)
         {
             ushort entityID = lastID;
             entities.Add(entityID, entity);
             
             lastID++;
-
-            if (isPlayer)
-            {
-                PlayerID = entityID;
-            }
-
             return entityID;
         }
 
         public ushort AddEntity(Entity entity, ushort id)
         {
             entities.Add(id, entity);
+            if (id > lastID)
+            {
+                lastID = (ushort)(id + 1);
+            }
             return id;
         }
 
@@ -188,14 +185,37 @@ namespace MFS
             Entity entity = GetEntity(id);
             entity.Position += moveVector;
 
-            foreach (Entity ent in entities.Values)
+
+            for (ushort i = 0; i < lastID; i++)
             {
+                Entity ent = GetEntity(i);
+                if (ent == null)
+                {
+                    continue; //next loop iteration
+                }
                 if(ent != entity)
                 {
                     Vector2 offset;
                     if (CollisionDetection(entity, ent, out offset))
                     {
-                        entity.Position -= offset;
+                        if (ent is Prop)
+                        {
+                            Prop prop = ent as Prop; //(Prop)ent can throw exception, as  ent as Prop will return null
+                            if (prop.PropType == PropType.PICKUP)
+                            {
+                                //TODO: pickup collision (add to inventory)
+                                //TODO: make a list of removable props
+                                RemoveEntity(i);
+                            }
+                            else if (prop.PropType == PropType.SOLID)
+                            {
+                                entity.Position -= offset;
+                            }
+                        }
+                        else
+                        {
+                            entity.Position -= offset;
+                        }
                         break;
                     }
                 }

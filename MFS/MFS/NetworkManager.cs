@@ -15,7 +15,8 @@ namespace MFS
         INITIAL_SETUP,
         ADD_PLAYER,
         POSITION_UPDATE,
-        REMOVE_PLAYER
+        REMOVE_PLAYER,
+        REMOVE_PROP
     };
 
     public class NetworkManager

@@ -80,7 +80,8 @@ namespace MFS
                 string entityType = msg.ReadString();
                 if (entityType == "prop")
                 {
-                    Prop prop = new Prop(Vector2.Zero, 1);
+                    PropType propType = (PropType)msg.ReadByte();
+                    Prop prop = new Prop(Vector2.Zero, 1, propType);
                     prop.UnpackPacket(msg);
                     EntityManager.Instance.AddEntity(prop, id);
                 }
