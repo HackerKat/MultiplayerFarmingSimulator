@@ -25,6 +25,15 @@ namespace MFS
         private ushort lastID;
 
         private Dictionary<ushort, Entity> entities;
+        private List<ushort> deletedIDs;
+        public List<ushort> DeletedIDs
+        {
+            get
+            {
+                return deletedIDs;
+            }
+        }
+
 
         public ushort PlayerID
         {
@@ -37,6 +46,7 @@ namespace MFS
         {
             entities = new Dictionary<ushort, Entity>();
             lastID = 0;
+            deletedIDs = new List<ushort>();
         }
 
         //public ushort AddEntity(Entity entity)
@@ -73,11 +83,15 @@ namespace MFS
             return null;
         }
 
-        public void RemoveEntity(ushort entityID)
+        public void RemoveEntity(ushort entityID, bool addToList = true)
         {
             if (entities.ContainsKey(entityID))
             {
                 entities.Remove(entityID);
+                if (addToList)
+                {
+                    deletedIDs.Add(entityID);
+                }
             }
         }
 
@@ -204,7 +218,6 @@ namespace MFS
                             if (prop.PropType == PropType.PICKUP)
                             {
                                 //TODO: pickup collision (add to inventory)
-                                //TODO: make a list of removable props
                                 RemoveEntity(i);
                             }
                             else if (prop.PropType == PropType.SOLID)

@@ -96,7 +96,39 @@ namespace MFS
             outMsg.Write((byte)PacketType.POSITION_UPDATE);
             outMsg.Write(id);
             entity.PackPacket(outMsg);
+
+            server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+        }
+
+        public void RemoveEntity()
+        {
+            var deletedIDs = EntityManager.Instance.DeletedIDs;
             
+            if (deletedIDs.Count != 0)
+            {
+                foreach (ushort deletedID in deletedIDs)
+                {
+                    NetOutgoingMessage outMsg = null;
+                    outMsg = server.CreateMessage();
+
+                    outMsg.Write((byte)PacketType.REMOVE_PROP);
+                    outMsg.Write(deletedID);
+                    server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
+                }
+                deletedIDs.Clear();
+            }
+        }
+
+        public void RemoveProp(NetIncomingMessage msg)
+        {
+            ushort propid = msg.ReadUInt16();
+            EntityManager.Instance.RemoveEntity(propid, false);
+
+            NetOutgoingMessage outMsg = null;
+            outMsg = server.CreateMessage();
+
+            outMsg.Write((byte)PacketType.REMOVE_PROP);
+            outMsg.Write(propid);
             server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
 
@@ -116,6 +148,9 @@ namespace MFS
                                 case PacketType.POSITION_UPDATE:
                                     SendPositionUpdate(msg);
                                     break;
+                                case PacketType.REMOVE_PROP:
+                                    RemoveProp(msg);
+                                    break;
                                 case PacketType.HELLO:
                                     InitialSetup(msg);
                                     break;
@@ -126,6 +161,7 @@ namespace MFS
                 server.Recycle(msg);
             }
             UpdatePosition();
+            RemoveEntity();
         }
     }
 }

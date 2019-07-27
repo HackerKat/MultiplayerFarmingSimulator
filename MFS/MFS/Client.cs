@@ -97,6 +97,12 @@ namespace MFS
             AddSelf(msg);
         }
 
+        public void RemoveProp(NetIncomingMessage msg)
+        {
+            ushort propid = msg.ReadUInt16();
+            EntityManager.Instance.RemoveEntity(propid, false);
+        }
+
         public void AddSelf(NetIncomingMessage msg)
         {
             ushort netid = msg.ReadUInt16();
@@ -118,6 +124,26 @@ namespace MFS
             }
         }
 
+        private void RemoveEntity()
+        {
+            var deletedIDs = EntityManager.Instance.DeletedIDs;
+
+            if (deletedIDs.Count != 0)
+            {
+                foreach (ushort deletedID in deletedIDs)
+                {
+                    NetOutgoingMessage outMsg = null;
+                    outMsg = client.CreateMessage();
+
+                    outMsg.Write((byte)PacketType.REMOVE_PROP);
+                    outMsg.Write(deletedID);
+
+                    client.SendMessage(outMsg, NetDeliveryMethod.ReliableOrdered);
+                }
+                deletedIDs.Clear();
+            }
+        }
+
         public void Update()
         {
             NetIncomingMessage msg;
@@ -136,6 +162,9 @@ namespace MFS
                                     ReceivePosition(msg);
                                 }
                                 break;
+                            case PacketType.REMOVE_PROP:
+                                    RemoveProp(msg);
+                                    break;
                             case PacketType.ADD_PLAYER:
                                 AddNetworkPlayer(msg);
                                 break;
@@ -151,6 +180,7 @@ namespace MFS
             if (clientInitialized)
             {
                 UpdatePosition();
+                RemoveEntity();
             }
         }
     }
