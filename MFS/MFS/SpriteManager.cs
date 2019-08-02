@@ -32,7 +32,7 @@ namespace MFS
         {
             sprites = new List<Sprite>();
         }
-        
+       
         public void LoadContent()
         {
             //playerID0
@@ -71,6 +71,9 @@ namespace MFS
             //tomatoID10
             Sprite tomato = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/tomato"), new Point(32, 25));
 
+            //swordID11
+            Sprite sword = new Sprite(Game.Content.Load<Texture2D>(@"Images/Items/sword"), new Point(32, 32));
+
 
             sprites.Add(playerSprite);
             sprites.Add(rockSprite01);
@@ -83,6 +86,7 @@ namespace MFS
             sprites.Add(treedead1);
             sprites.Add(house);
             sprites.Add(tomato);
+            sprites.Add(sword);
         }
 
         public Sprite GetSprite (ushort spriteID)

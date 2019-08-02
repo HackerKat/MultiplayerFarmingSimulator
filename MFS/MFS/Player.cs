@@ -1,12 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace MFS
 {
     public class Player : Entity
     {
         private InputManager inputManager;
+        private List<Prop> inventory;
 
         public Player(Vector2 position, ushort spriteID) 
             : base (position, spriteID)
@@ -14,6 +17,7 @@ namespace MFS
             Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
             
             inputManager = InputManager.Instance;
+            inventory = new List<Prop>();
         }
 
         private void BoundsCheck(Rectangle clientBounds)
@@ -26,6 +30,24 @@ namespace MFS
                 position.X = clientBounds.Width - CollisionRect.Width;
             if (position.Y > clientBounds.Height - CollisionRect.Height)
                 position.Y = clientBounds.Height - CollisionRect.Height;
+        }
+
+        public void SwingAxe()
+        {
+            Console.WriteLine("The axe is swung!");
+
+        }
+
+        public void AddToInventory(Prop item)
+        {
+            inventory.Add(item);
+            Console.WriteLine(item + "added");
+            //return true;
+        }
+
+        public List<Prop> GetInventory()
+        {
+            return inventory;
         }
 
         public override void Update(GameTime gameTime, Rectangle clientBounds)
@@ -44,6 +66,7 @@ namespace MFS
         {
             Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
             playerSprite.Draw(spriteBatch, position);
+            
         }
 
         public override string GetEntityType()

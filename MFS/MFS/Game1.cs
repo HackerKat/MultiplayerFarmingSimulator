@@ -3,6 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
+// using GeonBit UI elements
+using GeonBit.UI;
+using GeonBit.UI.Entities;
+
+using GBBtutton = GeonBit.UI.Entities.Button;
+using GBEntity = GeonBit.UI.Entities.Entity;
+using System.Collections.Generic;
+
 namespace MFS
 {
     public class Game1 : Game
@@ -25,11 +33,13 @@ namespace MFS
         private Button startHost;
         private Button startClient;
         private Parser parser;
+        private GBBtutton button;
+        private Panel inventoryPanel;
 
         public Game1(string hostname)
         {
             this.hostname = hostname;
-            string path = @"D:\Documents\University\Bachelor\MultiplayerFarmingSimulator\MFS\MFS\map_1.json";
+            string path = @"map_1.json";
             //string path = @"D:\Documents\University\Bachelor\MultiplayerFarmingSimulator\MFS\MFS\testmap.json";
             parser = new Parser(path);
             graphics = new GraphicsDeviceManager(this);
@@ -45,6 +55,18 @@ namespace MFS
 
         protected override void Initialize()
         {
+            UserInterface.Initialize(Content, BuiltinThemes.hd);
+
+            button = new GBBtutton("Inventory", anchor: Anchor.BottomRight,  size: new Vector2(300, 50));
+            button.Visible = false;
+            button.ToggleMode = true;
+            button.OnValueChange = OpenInventory;
+            UserInterface.Active.AddEntity(button);
+
+            inventoryPanel = new Panel(new Vector2(300, 300));
+            inventoryPanel.Visible = false;
+            UserInterface.Active.AddEntity(inventoryPanel);
+
             spriteManager = SpriteManager.Instance;
             entityManager = EntityManager.Instance;
             spriteManager.Game = this;
@@ -96,6 +118,31 @@ namespace MFS
            
         }
 
+        private void OpenInventory(GBEntity entity)
+        {
+            if (button.Checked)
+            {
+                inventoryPanel.ClearChildren();
+                ushort playerid = entityManager.PlayerID;
+                Player player = (Player)entityManager.GetEntity(playerid);
+
+                List<Prop> inventory = player.GetInventory();
+
+                foreach (Prop item in inventory)
+                {
+                    ushort spriteid = item.GetSpriteID();
+                    Sprite sprite = spriteManager.GetSprite(spriteid);
+
+                    inventoryPanel.AddChild(sprite.GetImage());
+                }
+                inventoryPanel.Visible = true;
+            }
+            else
+            {
+                inventoryPanel.Visible = false;
+            }
+        }
+
         private void UpdateMainMenu()
         {
             startHost.Update();
@@ -106,12 +153,18 @@ namespace MFS
         {
             networkManager.StartHost();
             state = GameState.GAMEPLAY;
+
+
+            button.Visible = true;
         }
 
         private void StartClient()
         {
             networkManager.StartClient(hostname);
             state = GameState.GAMEPLAY;
+
+
+            button.Visible = true;
         }
 
         private void DrawMainMenu()
@@ -139,14 +192,18 @@ namespace MFS
 
             entityManager.Draw(spriteBatch);
 
-            //Draw font
-            spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Red,
-                0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            //button.Visible = true;
+
+            ////Draw font
+            //spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Red,
+            //    0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
 
 
         protected override void Update(GameTime gameTime)
         {
+            // GeonBit.UIL update UI manager
+            UserInterface.Active.Update(gameTime);
             switch (state)
             {
                 case GameState.MAINMENU:
@@ -164,6 +221,8 @@ namespace MFS
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            
+
             spriteBatch.Begin();
 
             switch (state)
@@ -177,6 +236,9 @@ namespace MFS
             }
 
             spriteBatch.End();
+
+            // GeonBit.UI: draw UI using the spriteBatch you created above
+            UserInterface.Active.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

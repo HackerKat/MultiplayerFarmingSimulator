@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+//TODO: Major refactor of Client/Server (method renaming and delete all unnecessray methods)
 namespace MFS
 {
     class Client
@@ -113,6 +114,7 @@ namespace MFS
             InputManager.Instance.EntityToControlID = netid;
         }
 
+       //TODO: when second player is added, position of first and second player changes!
         public void AddNetworkPlayer(NetIncomingMessage msg)
         {
             NetworkPlayer newPlayer = new NetworkPlayer(new Vector2(100, 100), 0);

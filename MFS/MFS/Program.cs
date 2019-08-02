@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace MFS
 {
@@ -8,12 +9,21 @@ namespace MFS
     /// </summary>
     public static class Program
     {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// 
+
         [STAThread]
         static void Main(string[] args)
         {
+#if DEBUG
+            AllocConsole();
+#endif
             string hostname = "127.0.0.1";
             if (args.Length == 1)
             {

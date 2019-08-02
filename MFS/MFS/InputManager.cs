@@ -15,7 +15,7 @@ namespace MFS
             get;
             set;
         }
-        //private KeyboardState keyState;
+
         public static InputManager Instance
         {
             get
@@ -27,15 +27,19 @@ namespace MFS
                 return instance;
             }
         }
+
         private static InputManager instance;
+        private KeyboardState oldState;
 
         private InputManager()
         {
+            oldState = Keyboard.GetState();
         }
 
         public void HandleInput()
         {
             Entity entity = EntityManager.Instance.GetEntity(EntityToControlID);
+            KeyboardState newState = Keyboard.GetState();
             
             Vector2 inputDirection = Vector2.Zero;
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
@@ -49,8 +53,12 @@ namespace MFS
 
             EntityManager.Instance.MoveEntity(EntityToControlID, inputDirection);
 
-            //entity.Position += inputDirection;
+            if (newState.IsKeyDown(Keys.E) && oldState.IsKeyUp(Keys.E))
+            {
+                Player player = (Player)entity;
+                player.SwingAxe();
+            }
+            oldState = newState;
         }
-
     }
 }

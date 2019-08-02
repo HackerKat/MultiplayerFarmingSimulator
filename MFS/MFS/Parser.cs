@@ -77,11 +77,20 @@ namespace MFS
                     List<JObject> layerobjects = layer["objects"].Values<JObject>().ToList();
                     foreach (JObject lobject in layerobjects)
                     {
+                        string type = lobject["type"].Value<string>();
+                       
                         //ushort gid = lobject["gid"].Value<ushort>();
                         int posX = lobject["x"].Value<int>();
                         int posY = lobject["y"].Value<int>();
                         int height = lobject["height"].Value<int>();
-                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 10, PropType.PICKUP));
+                        if (type == "sword")
+                        {
+                            EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 11, PropType.PICKUP));
+                        }
+                        else if(type == "pickup")
+                        {
+                            EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 10, PropType.PICKUP));
+                        }
                     }
                 }
             }

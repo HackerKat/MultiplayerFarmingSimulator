@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GeonBit.UI.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -46,6 +47,13 @@ namespace MFS {
             this.sheetSize = sheetSize;
             this.millisecondsPerFrame = millisecondsPerFrame;
             currentFrame = new Point(0, 0);
+        }
+
+        public Image GetImage()
+        {
+            Vector2 size = new Vector2(frameSize.X, frameSize.Y);
+            Image img = new Image(textureImage, size);
+            return img;
         }
 
         public void Animate(GameTime gameTime)

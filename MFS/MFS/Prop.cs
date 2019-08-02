@@ -12,8 +12,6 @@ namespace MFS
 
     public class Prop : Entity
     {
-        //public delegate void CollisionEvent();
-        
         private PropType propType;
         public PropType PropType
         {
@@ -42,6 +40,11 @@ namespace MFS
                 position.Y = clientBounds.Height - CollisionRect.Height;
         }
 
+        public ushort GetSpriteID()
+        {
+            return spriteID;
+        }
+
         public override void Update(GameTime gameTime, Rectangle clientBounds)
         {
             Sprite propSprite = SpriteManager.Instance.GetSprite(spriteID);
@@ -64,13 +67,5 @@ namespace MFS
         {
             return "prop";
         }
-
-        //public void CollisionDetected(Entity entity, CollisionEvent func)
-        //{
-        //    if (CollisionRect.Intersects(entity.CollisionRect))
-        //    {
-        //        func();
-        //    }
-        //}
     }
 }

@@ -1906,7 +1906,7 @@
                  "id":237,
                  "name":"",
                  "rotation":0,
-                 "type":"",
+                 "type":"pickup",
                  "visible":true,
                  "width":32,
                  "x":704,
@@ -1918,7 +1918,7 @@
                  "id":238,
                  "name":"",
                  "rotation":0,
-                 "type":"",
+                 "type":"pickup",
                  "visible":true,
                  "width":32,
                  "x":776,
@@ -1930,11 +1930,23 @@
                  "id":239,
                  "name":"",
                  "rotation":0,
-                 "type":"",
+                 "type":"pickup",
                  "visible":true,
                  "width":32,
                  "x":864,
                  "y":285
+                }, 
+                {
+                 "gid":117,
+                 "height":32,
+                 "id":241,
+                 "name":"",
+                 "rotation":0,
+                 "type":"sword",
+                 "visible":true,
+                 "width":32,
+                 "x":929,
+                 "y":190
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1943,7 +1955,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":240,
+ "nextobjectid":242,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.4",
@@ -1964,6 +1976,10 @@
         {
          "firstgid":9,
          "source":"..\/TSX\/pickupplants.tsx"
+        }, 
+        {
+         "firstgid":117,
+         "source":"..\/TSX\/sword.tsx"
         }],
  "tilewidth":32,
  "type":"map",

@@ -157,23 +157,27 @@ namespace MFS
 
             Vector2 distance = bCenter - aCenter;
 
+            //collison happens horizontally
             if(Math.Abs(distance.X) > Math.Abs(distance.Y))
             {
                 float length = 0f;
-
+                
+                //a moves from right to left
                 if (distance.X < 0)
                 {
                     length = (aCenter.X - aHalfExtend.X) - (bCenter.X + bHalfExtend.X);
                 }
 
+                //a moves from left to right
                 else
                 {
                     length = (aCenter.X + aHalfExtend.X) - (bCenter.X - bHalfExtend.X);
                 }
 
-                offset.X = length;
+                offset.X = -length;
             }
 
+            //collison happens vertically
             else
             {
                 float length = 0f;
@@ -188,7 +192,7 @@ namespace MFS
                     length = (aCenter.Y + aHalfExtend.Y) - (bCenter.Y - bHalfExtend.Y);
                 }
 
-                offset.Y = length;
+                offset.Y = -length;
 
             }
             return true;
@@ -215,14 +219,16 @@ namespace MFS
                         if (ent is Prop)
                         {
                             Prop prop = ent as Prop; //(Prop)ent can throw exception, as  ent as Prop will return null
+                            Player player = entity as Player;
                             if (prop.PropType == PropType.PICKUP)
                             {
                                 //TODO: pickup collision (add to inventory)
                                 RemoveEntity(i);
+                                player.AddToInventory(prop);
                             }
                             else if (prop.PropType == PropType.SOLID)
                             {
-                                entity.Position -= offset;
+                                entity.Position += offset;
                             }
                         }
                         else
