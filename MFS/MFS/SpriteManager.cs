@@ -21,7 +21,9 @@ namespace MFS
         }
         private static SpriteManager instance;
 
-        private List <Sprite> sprites;
+        private Dictionary<string, ushort> lookupSpriteTable;
+        private Dictionary <ushort, Sprite> sprites;
+        //TODO: shouldn't it be private?
         public Game Game
         {
             get;
@@ -30,68 +32,92 @@ namespace MFS
 
         private SpriteManager()
         {
-            sprites = new List<Sprite>();
+            sprites = new Dictionary<ushort, Sprite>();
+            lookupSpriteTable = new Dictionary<string, ushort>();
         }
        
         public void LoadContent()
         {
-            //playerID0
+            //playerID1
             Sprite playerSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/AnimatedSprites/mani-idle-run"),
                                              new Point(24, 24), new Point(7, 1), 5);
-
-            ////rock04ID1
-            Sprite rockSprite01 = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock04"),
-                                            new Point(26, 15));
-
-            ////rock05ID2
-            Sprite rockSprite02 = new Sprite(Game.Content.Load<Texture2D>(@"Images/generic-rpg-rock05"),
-                                            new Point(26, 15));
             
-            //backgroundID3
-            Sprite bckgr = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/grasstiles2"), new Point(32, 32), new Point(2, 1), 0);
+            //backgroundID0
+            Sprite background = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/grasstiles2"), new Point(32, 32), new Point(2, 1), 0);
 
-            //treealive1ID4
+            //treealive1ID11
             Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(56,64));
 
-            //treealive2ID5
+            //treealive2ID12
             Sprite treealive2 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive2"), new Point(56, 72));
 
-            //treealive3ID6
+            //treealive3ID13
             Sprite treealive3 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive3"), new Point(64, 72));
 
-            //treestump1ID7
+            //treestump1ID14
             Sprite treestump1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treestump1"), new Point(32, 32));
 
-            //treedead1ID8
+            //treedead1ID15
             Sprite treedead1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treedead1"), new Point(56, 64));
 
-            //houseID9
+            //houseID10
             Sprite house = new Sprite(Game.Content.Load<Texture2D>(@"Images/House/House"), new Point(100, 100));
 
-            //tomatoID10
+            //TODO: add more vegetables and tools and adjust their IDs
+            //tomatoID151
             Sprite tomato = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/tomato"), new Point(32, 25));
 
-            //swordID11
-            Sprite sword = new Sprite(Game.Content.Load<Texture2D>(@"Images/Items/sword"), new Point(32, 32));
+            //swordID201
+            Sprite axe = new Sprite(Game.Content.Load<Texture2D>(@"Images/Items/sword"), new Point(32, 32));
 
+            //woodlogID251
+            Sprite woodlog = new Sprite(Game.Content.Load<Texture2D>(@"Images/Items/woodlog"), new Point(32, 32));
 
-            sprites.Add(playerSprite);
-            sprites.Add(rockSprite01);
-            sprites.Add(rockSprite02);
-            sprites.Add(bckgr);
-            sprites.Add(treealive1);
-            sprites.Add(treealive2);
-            sprites.Add(treealive3);
-            sprites.Add(treestump1);
-            sprites.Add(treedead1);
-            sprites.Add(house);
-            sprites.Add(tomato);
-            sprites.Add(sword);
+            //missingSpriteID65535
+            Sprite missingSprite = new Sprite(Game.Content.Load<Texture2D>(@"TESTCUBE"), new Point(32, 32));
+
+            sprites.Add(1, playerSprite);
+            lookupSpriteTable.Add("playerSprite", 1);
+            sprites.Add(0, background);
+            lookupSpriteTable.Add("background", 0);
+            sprites.Add(11, treealive1);
+            lookupSpriteTable.Add("treealive1", 11);
+            sprites.Add(12, treealive2);
+            lookupSpriteTable.Add("treealive2", 12);
+            sprites.Add(13, treealive3);
+            lookupSpriteTable.Add("treealive3", 13);
+            sprites.Add(14, treestump1);
+            lookupSpriteTable.Add("treestump1", 14);
+            sprites.Add(15, treedead1);
+            lookupSpriteTable.Add("treedead1", 15);
+            sprites.Add(10, house);
+            lookupSpriteTable.Add("house", 10);
+            sprites.Add(101, tomato);
+            lookupSpriteTable.Add("tomato", 101);
+            sprites.Add(201, axe);
+            lookupSpriteTable.Add("axe", 201);
+            sprites.Add(251, woodlog);
+            lookupSpriteTable.Add("woodlog", 251);
+            sprites.Add(ushort.MaxValue, missingSprite);
+            lookupSpriteTable.Add("missingSprite", ushort.MaxValue);
         }
 
         public Sprite GetSprite (ushort spriteID)
         {
-            return sprites[spriteID];
+            if (sprites.ContainsKey(spriteID))
+            {
+                return sprites[spriteID];
+            }
+            return sprites[ushort.MaxValue];
+        }
+
+        public ushort GetSpriteIDByName(string spriteName)
+        {
+            if (lookupSpriteTable.ContainsKey(spriteName))
+            {
+                return lookupSpriteTable[spriteName];
+            }
+            return ushort.MaxValue;
         }
     }
 }

@@ -53,10 +53,16 @@ namespace MFS
 
             EntityManager.Instance.MoveEntity(EntityToControlID, inputDirection);
 
+            if (entity is Player)
+            {
+                Player player = entity as Player;
+                player.Direction = Vector2.Normalize(inputDirection);
+            }
+
             if (newState.IsKeyDown(Keys.E) && oldState.IsKeyUp(Keys.E))
             {
                 Player player = (Player)entity;
-                player.SwingAxe();
+                //player.SwingAxe();
             }
             oldState = newState;
         }

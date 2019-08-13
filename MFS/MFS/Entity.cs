@@ -10,6 +10,16 @@ using System.Threading.Tasks;
 
 namespace MFS
 {
+    public enum EntityType
+    {
+        PROP,
+        PLAYER,
+        ITEM,
+        AXE,
+        VEGETABLE,
+        RESOURCE
+    }
+
     public abstract class Entity
     {
         protected Vector2 position;
@@ -25,6 +35,17 @@ namespace MFS
             }
         }
         protected ushort spriteID;
+        public ushort SpriteID
+        {
+            get
+            {
+                return spriteID;
+            }
+            private set
+            {
+                spriteID = value;
+            }
+        }
         protected Point size;
         public Point Size
         {
@@ -50,10 +71,18 @@ namespace MFS
                 collisionRect = value;
             }
         }
-
-
-        public Entity(Vector2 position, ushort spriteID)
+        protected EntityType entityType;
+        public EntityType EntityType
         {
+            get
+            {
+                return entityType;
+            }
+        }
+
+        public Entity(EntityType entityType, Vector2 position, ushort spriteID)
+        {
+            this.entityType = entityType;
             this.position = position;
             this.spriteID = spriteID;
 
@@ -62,12 +91,18 @@ namespace MFS
             int offset = 10; //gives a more realistic collider box
             CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X - offset, size.Y - offset);
         }
-        
-        public abstract void Update(GameTime gameTime, Rectangle clientBounds);
 
-        public abstract void Draw(SpriteBatch spriteBatch);
-
-        public abstract string GetEntityType();
+        public virtual void BoundsCheck(Rectangle clientBounds)
+        {
+            if (position.X < 0)
+                position.X = 0;
+            if (position.Y < 0)
+                position.Y = 0;
+            if (position.X > clientBounds.Width - CollisionRect.Width)
+                position.X = clientBounds.Width - CollisionRect.Width;
+            if (position.Y > clientBounds.Height - CollisionRect.Height)
+                position.Y = clientBounds.Height - CollisionRect.Height;
+        }
 
         public virtual void PackPacket(NetOutgoingMessage msgToFill)
         {
@@ -81,6 +116,24 @@ namespace MFS
             position = msgToRead.ReadVector2();
             spriteID = msgToRead.ReadUInt16();
             Size = msgToRead.ReadPoint();
+        }
+
+        public virtual void Update(GameTime gameTime, Rectangle clientBounds)
+        {
+            Sprite entitySprite = SpriteManager.Instance.GetSprite(spriteID);
+
+            BoundsCheck(clientBounds);
+
+            entitySprite.Animate(gameTime);
+
+            collisionRect.X = (int)position.X;
+            collisionRect.Y = (int)position.Y;
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            Sprite entitySprite = SpriteManager.Instance.GetSprite(spriteID);
+            entitySprite.Draw(spriteBatch, position);
         }
     }
 }

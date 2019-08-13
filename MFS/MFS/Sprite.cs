@@ -21,10 +21,9 @@ namespace MFS {
                 currentFrame = value;
             }
         }
-
+        
+        private int timeSinceLastFrame;
         private Point frameSize;
-        private int timeSinceLastFrame = 0;
-
         public Point FrameSize
         {
             get
@@ -46,6 +45,7 @@ namespace MFS {
             this.frameSize = frameSize;
             this.sheetSize = sheetSize;
             this.millisecondsPerFrame = millisecondsPerFrame;
+            timeSinceLastFrame = 0;
             currentFrame = new Point(0, 0);
         }
 

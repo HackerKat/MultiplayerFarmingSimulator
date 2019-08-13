@@ -39,57 +39,52 @@ namespace MFS
             
             return width * tilewidth;
         }
-        
-        //TODO: separate method for parsing and entity adding
-        public void ObjectLayer()
+
+        public void ParseJson()
         {
             List<JObject> layers = root["layers"].Values<JObject>().ToList();
 
             foreach (JObject layer in layers)
             {
                 string name = layer["name"].Value<string>();
-                if (name == "Trees")
+                if (name == "Objects")
                 {
                     List<JObject> layerobjects = layer["objects"].Values<JObject>().ToList();
-                    foreach (JObject lobject in layerobjects)
+                    foreach (JObject layerobject in layerobjects)
                     {
-                        ushort gid = lobject["gid"].Value<ushort>();
-                        int posX = lobject["x"].Value<int>();
-                        int posY = lobject["y"].Value<int>();
-                        int height = lobject["height"].Value<int>();
-                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1), PropType.SOLID));
-                    }
-                }
-                else if (name == "house")
-                {
-                    List<JObject> layerobjects = layer["objects"].Values<JObject>().ToList();
-                    foreach (JObject lobject in layerobjects)
-                    {
-                        ushort gid = lobject["gid"].Value<ushort>();
-                        int posX = lobject["x"].Value<int>();
-                        int posY = lobject["y"].Value<int>();
-                        int height = lobject["height"].Value<int>();
-                        EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), (ushort)(gid + 1), PropType.SOLID));
-                    }
-                }
-                else if (name == "pickup")
-                {
-                    List<JObject> layerobjects = layer["objects"].Values<JObject>().ToList();
-                    foreach (JObject lobject in layerobjects)
-                    {
-                        string type = lobject["type"].Value<string>();
-                       
-                        //ushort gid = lobject["gid"].Value<ushort>();
-                        int posX = lobject["x"].Value<int>();
-                        int posY = lobject["y"].Value<int>();
-                        int height = lobject["height"].Value<int>();
-                        if (type == "sword")
+                        string spriteName = layerobject["name"].Value<string>();
+                        ushort spriteID = SpriteManager.Instance.GetSpriteIDByName(spriteName);
+                        int posX = layerobject["x"].Value<int>();
+                        int posY = layerobject["y"].Value<int>();
+                        int height = layerobject["height"].Value<int>();
+                        EntityType entityType = (EntityType)Enum.Parse(typeof (EntityType), layerobject["type"].Value<string>());
+                        switch (entityType)
                         {
-                            EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 11, PropType.PICKUP));
-                        }
-                        else if(type == "pickup")
-                        {
-                            EntityManager.Instance.AddEntity(new Prop(new Vector2(posX, posY - height), 10, PropType.PICKUP));
+                            case EntityType.PROP:
+                                {
+                                    Prop prop = new Prop(new Vector2(posX, posY - height), spriteID);
+                                    string kind = layerobject["properties"].Values<JObject>().ToList()[0].Value<JObject>()["value"].Value<string>();
+                                    Kind propKind = (Kind) Enum.Parse(typeof(Kind), kind);
+                                    prop.Kind = propKind;
+                                    EntityManager.Instance.AddEntity(prop);
+                                    Console.WriteLine(prop.Kind);
+                                }
+                                break;
+                            case EntityType.PLAYER:
+                                {
+                                    EntityManager.Instance.AddEntity(new Player(new Vector2(posX, posY - height), spriteID));
+                                }
+                                break;
+                            case EntityType.AXE:
+                                {
+                                    EntityManager.Instance.AddEntity(new Axe(new Vector2(posX, posY - height), spriteID));
+                                }
+                                break;
+                            case EntityType.VEGETABLE:
+                                {
+                                    EntityManager.Instance.AddEntity(new Vegetable(new Vector2(posX, posY - height), spriteID));
+                                }
+                                break;
                         }
                     }
                 }

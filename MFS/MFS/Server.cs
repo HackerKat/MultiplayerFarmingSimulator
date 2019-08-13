@@ -12,7 +12,6 @@ namespace MFS
     {
         private NetServer server;
         private NetPeerConfiguration config;
-       
 
         public Server(NetPeerConfiguration config)
         {
@@ -47,7 +46,7 @@ namespace MFS
 
         public void InitialSetup(NetIncomingMessage msg)
         {
-            NetworkPlayer netPlayer = new NetworkPlayer(new Vector2(500, 500), 0);
+            NetworkPlayer netPlayer = new NetworkPlayer(new Vector2(500, 500), 1);
             NetOutgoingMessage outMsg = server.CreateMessage();
             var entities = EntityManager.Instance.GetAllEntities();
             outMsg.Write((byte)PacketType.INITIAL_SETUP);
@@ -57,14 +56,10 @@ namespace MFS
             {
                 ushort id = element.Key;
                 Entity entity = element.Value;
+                Console.WriteLine(id);
 
                 outMsg.Write(id);
-                outMsg.Write(entity.GetEntityType());
-                if (entity is Prop)
-                {
-                    Prop prop = entity as Prop;
-                    outMsg.Write((byte)prop.PropType);
-                }
+                outMsg.Write((Byte)entity.EntityType);
                 entity.PackPacket(outMsg);
             }
 

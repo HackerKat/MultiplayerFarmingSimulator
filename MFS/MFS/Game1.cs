@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-
 // using GeonBit UI elements
 using GeonBit.UI;
 using GeonBit.UI.Entities;
@@ -33,13 +32,13 @@ namespace MFS
         private Button startHost;
         private Button startClient;
         private Parser parser;
-        private GBBtutton button;
+        private GBBtutton inventoryButton;
         private Panel inventoryPanel;
 
         public Game1(string hostname)
         {
             this.hostname = hostname;
-            string path = @"map_1.json";
+            string path = @"map_2.json";
             //string path = @"D:\Documents\University\Bachelor\MultiplayerFarmingSimulator\MFS\MFS\testmap.json";
             parser = new Parser(path);
             graphics = new GraphicsDeviceManager(this);
@@ -57,11 +56,11 @@ namespace MFS
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
 
-            button = new GBBtutton("Inventory", anchor: Anchor.BottomRight,  size: new Vector2(300, 50));
-            button.Visible = false;
-            button.ToggleMode = true;
-            button.OnValueChange = OpenInventory;
-            UserInterface.Active.AddEntity(button);
+            inventoryButton = new GBBtutton("Inventory", anchor: Anchor.BottomRight,  size: new Vector2(300, 50));
+            inventoryButton.Visible = false;
+            inventoryButton.ToggleMode = true;
+            inventoryButton.OnValueChange = OpenInventory;
+            UserInterface.Active.AddEntity(inventoryButton);
 
             inventoryPanel = new Panel(new Vector2(300, 300));
             inventoryPanel.Visible = false;
@@ -79,14 +78,11 @@ namespace MFS
 
         protected override void LoadContent()
         {
-            
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
             spriteManager.LoadContent();
-            parser.ObjectLayer();
-            Player player = new Player( new Vector2(300, 300), 0);
-            //Prop rock01 = new Prop(new Vector2(200, 100), 1);
-            //Prop rock02 = new Prop(new Vector2(50, 50), 2);
+            parser.ParseJson();
+            Player player = new Player( new Vector2(300, 300), 1);
 
             Texture2D buttonTexture = Content.Load<Texture2D>(@"Images\UI\button3");
 
@@ -96,16 +92,12 @@ namespace MFS
             EntityManager.Instance.PlayerID = entityID;
             InputManager.Instance.EntityToControlID = entityID;
 
-            //entityManager.AddEntity(rock01);
-            //entityManager.AddEntity(rock02);
-
             world.LoadTiles();
             world.GenerateWorld();
 
             int padding = 10;
             int centerX = Window.ClientBounds.Width / 2;
             int centerY = Window.ClientBounds.Height / 2;
-
 
             startHost = new Button("Host game", centerX - 50, centerY - 40 - padding, 100, 40, StartHost, buttonTexture);
             startClient = new Button("Connect", centerX - 50, centerY - padding, 100, 40, StartClient, buttonTexture);
@@ -120,20 +112,23 @@ namespace MFS
 
         private void OpenInventory(GBEntity entity)
         {
-            if (button.Checked)
+            if (inventoryButton.Checked)
             {
                 inventoryPanel.ClearChildren();
                 ushort playerid = entityManager.PlayerID;
                 Player player = (Player)entityManager.GetEntity(playerid);
 
-                List<Prop> inventory = player.GetInventory();
+                List<Item> inventory = player.GetInventory().GetAllItems();
 
-                foreach (Prop item in inventory)
+                foreach (Item item in inventory)
                 {
-                    ushort spriteid = item.GetSpriteID();
+                    ushort spriteid = item.SpriteID;
                     Sprite sprite = spriteManager.GetSprite(spriteid);
+                    Image img = sprite.GetImage();
 
-                    inventoryPanel.AddChild(sprite.GetImage());
+                    img.OnClick += (GBEntity ent) => item.Use();
+
+                    inventoryPanel.AddChild(img);
                 }
                 inventoryPanel.Visible = true;
             }
@@ -154,8 +149,7 @@ namespace MFS
             networkManager.StartHost();
             state = GameState.GAMEPLAY;
 
-
-            button.Visible = true;
+            inventoryButton.Visible = true;
         }
 
         private void StartClient()
@@ -163,8 +157,7 @@ namespace MFS
             networkManager.StartClient(hostname);
             state = GameState.GAMEPLAY;
 
-
-            button.Visible = true;
+            inventoryButton.Visible = true;
         }
 
         private void DrawMainMenu()
@@ -199,7 +192,6 @@ namespace MFS
             //    0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
 
-
         protected override void Update(GameTime gameTime)
         {
             // GeonBit.UIL update UI manager
@@ -213,15 +205,12 @@ namespace MFS
                     UpdateGameplay(gameTime);
                     break;
             }
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            
 
             spriteBatch.Begin();
 

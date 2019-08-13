@@ -8,31 +8,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MFS
 {
+    //TODO: Player in Network player, and player shoukd be deleted
     public class NetworkPlayer : Entity
     {
         public NetworkPlayer(Vector2 position, ushort spriteID)
-            : base(position, spriteID)
+            : base(EntityType.PLAYER, position, spriteID)
         {
 
         }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            Sprite playerSprite = SpriteManager.Instance.GetSprite(spriteID);
-            playerSprite.Draw(spriteBatch, position);
-        }
-
-        public override void Update(GameTime gameTime, Rectangle clientBounds)
-        {
-            collisionRect.X = (int)position.X;
-            collisionRect.Y = (int)position.Y;
-
-        }
-
-        public override string GetEntityType()
-        {
-            return "networkplayer";
-        }
-
     }
 }

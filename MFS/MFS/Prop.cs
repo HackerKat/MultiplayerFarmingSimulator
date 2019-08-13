@@ -1,71 +1,39 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Lidgren.Network;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace MFS
 {
-    public enum PropType
+    public enum Kind
     {
-        SOLID,
-        PICKUP
-    };
+        TREE,
+        HOUSE
+    }
 
     public class Prop : Entity
     {
-        private PropType propType;
-        public PropType PropType
+        public Kind Kind
         {
-            get
-            {
-                return propType;
-            }
+            get; set;
         }
 
-        public Prop (Vector2 position, ushort spriteID, PropType propType)
-            : base (position, spriteID)
+        public Prop (Vector2 position, ushort spriteID)
+            : base (EntityType.PROP, position, spriteID)
         {
             Sprite propSprite = SpriteManager.Instance.GetSprite(spriteID);
-            this.propType = propType;
-        }
-        
-        public void BoundsCheck(Rectangle clientBounds)
-        {
-            if (position.X < 0)
-                position.X = 0;
-            if (position.Y < 0)
-                position.Y = 0;
-            if (position.X > clientBounds.Width - CollisionRect.Width)
-                position.X = clientBounds.Width - CollisionRect.Width;
-            if (position.Y > clientBounds.Height - CollisionRect.Height)
-                position.Y = clientBounds.Height - CollisionRect.Height;
         }
 
-        public ushort GetSpriteID()
+        public override void PackPacket(NetOutgoingMessage msgToFill)
         {
-            return spriteID;
+            base.PackPacket(msgToFill);
+            msgToFill.Write((byte)Kind);
         }
 
-        public override void Update(GameTime gameTime, Rectangle clientBounds)
+        public override void UnpackPacket(NetIncomingMessage msgToRead)
         {
-            Sprite propSprite = SpriteManager.Instance.GetSprite(spriteID);
-            BoundsCheck(clientBounds);
-
-            propSprite.Animate(gameTime);
-
-            collisionRect.X = (int)position.X;
-            collisionRect.Y = (int)position.Y;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            Sprite propSprite = SpriteManager.Instance.GetSprite(spriteID);
-
-            propSprite.Draw(spriteBatch, position);
-        }
-
-        public override string GetEntityType()
-        {
-            return "prop";
+            base.UnpackPacket(msgToRead);
+            Kind = (Kind)msgToRead.ReadByte();
         }
     }
 }

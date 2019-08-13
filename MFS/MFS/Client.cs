@@ -78,23 +78,41 @@ namespace MFS
             for (int i = 0; i < count; i++)
             {
                 ushort id = msg.ReadUInt16();
-                string entityType = msg.ReadString();
-                if (entityType == "prop")
+                Console.WriteLine(id);
+                EntityType entityType = (EntityType)msg.ReadByte();
+                switch (entityType)
                 {
-                    PropType propType = (PropType)msg.ReadByte();
-                    Prop prop = new Prop(Vector2.Zero, 1, propType);
-                    prop.UnpackPacket(msg);
-                    EntityManager.Instance.AddEntity(prop, id);
-                }
-                else if (entityType == "player" || entityType == "networkplayer")
-                {
-                    NetworkPlayer netp = new NetworkPlayer(Vector2.Zero, 0);
-                    netp.UnpackPacket(msg);
-                    EntityManager.Instance.AddEntity(netp, id);
+                    case EntityType.PROP:
+                        {
+                            Prop prop = new Prop(Vector2.Zero, 1);
+                            prop.UnpackPacket(msg);
+                            EntityManager.Instance.AddEntity(prop, id);
+                        }
+                        break;
+                    case EntityType.PLAYER:
+                        {
+                            NetworkPlayer netp = new NetworkPlayer(Vector2.Zero, 1);
+                            netp.UnpackPacket(msg);
+                            EntityManager.Instance.AddEntity(netp, id);
+                        }
+                        break;
+                    case EntityType.AXE:
+                        {
+                            Axe axe = new Axe(Vector2.Zero, 11);
+                            axe.UnpackPacket(msg);
+                            EntityManager.Instance.AddEntity(axe, id);
+                        }
+                        break;
+                    case EntityType.VEGETABLE:
+                        {
+                            Vegetable vegetable = new Vegetable(Vector2.Zero, 11);
+                            vegetable.UnpackPacket(msg);
+                            EntityManager.Instance.AddEntity(vegetable, id);
+                        }
+                        break;
                 }
             }
             clientInitialized = true;
-            
             AddSelf(msg);
         }
 
@@ -107,7 +125,7 @@ namespace MFS
         public void AddSelf(NetIncomingMessage msg)
         {
             ushort netid = msg.ReadUInt16();
-            Player player = new Player(new Vector2(500, 500), 0);
+            Player player = new Player(new Vector2(500, 500), 1);
 
             EntityManager.Instance.AddEntity(player, netid);
             EntityManager.Instance.PlayerID = netid;
@@ -117,7 +135,7 @@ namespace MFS
        //TODO: when second player is added, position of first and second player changes!
         public void AddNetworkPlayer(NetIncomingMessage msg)
         {
-            NetworkPlayer newPlayer = new NetworkPlayer(new Vector2(100, 100), 0);
+            NetworkPlayer newPlayer = new NetworkPlayer(new Vector2(100, 100), 1);
             ushort id = msg.ReadUInt16();
             if (id != EntityManager.Instance.PlayerID)
             {
@@ -126,6 +144,7 @@ namespace MFS
             }
         }
 
+        //TODO: should be public?
         private void RemoveEntity()
         {
             var deletedIDs = EntityManager.Instance.DeletedIDs;

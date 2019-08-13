@@ -35,7 +35,7 @@ namespace MFS
             Rectangle button = new Rectangle (buttonX, buttonY, width, height);
         }
 
-        public bool enterButton()
+        public bool EnterButton()
         {
             MouseState state = Mouse.GetState();
             if (state.X < buttonX + width &&
@@ -45,7 +45,6 @@ namespace MFS
             {
                 return true;
             }
-
             return false;
         }
 
@@ -53,7 +52,7 @@ namespace MFS
         {
             MouseState newState = Mouse.GetState();
 
-            if (enterButton() && newState.LeftButton == ButtonState.Pressed && 
+            if (EnterButton() && newState.LeftButton == ButtonState.Pressed && 
                 oldState.LeftButton == ButtonState.Released)
             {
                 func();

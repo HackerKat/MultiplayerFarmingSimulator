@@ -22,8 +22,8 @@ namespace MFS
             }
         }
         private static EntityManager instance;
-        private ushort lastID;
 
+        private ushort lastID;
         private Dictionary<ushort, Entity> entities;
         private List<ushort> deletedIDs;
         public List<ushort> DeletedIDs
@@ -34,13 +34,11 @@ namespace MFS
             }
         }
 
-
         public ushort PlayerID
         {
             get;
             set;
         }
-
 
         private EntityManager()
         {
@@ -49,11 +47,7 @@ namespace MFS
             deletedIDs = new List<ushort>();
         }
 
-        //public ushort AddEntity(Entity entity)
-        //{
-        //    return AddEntity(entity, false);
-        //}
-
+        //Host use
         public ushort AddEntity(Entity entity)
         {
             ushort entityID = lastID;
@@ -63,6 +57,7 @@ namespace MFS
             return entityID;
         }
 
+        //Client use
         public ushort AddEntity(Entity entity, ushort id)
         {
             entities.Add(id, entity);
@@ -72,7 +67,6 @@ namespace MFS
             }
             return id;
         }
-
 
         public Entity GetEntity(ushort entityID)
         {
@@ -111,7 +105,7 @@ namespace MFS
         public void Draw(SpriteBatch spriteBatch)
         {
             List<Entity> entitiesToDraw = entities.Values.ToList();
-            entitiesToDraw.Sort(CompareEntity);
+            entitiesToDraw.Sort(CompareByDepth);
 
             foreach (Entity ent in entitiesToDraw)
             {
@@ -119,7 +113,7 @@ namespace MFS
             }
         }
 
-        private int CompareEntity(Entity a, Entity b)
+        private int CompareByDepth(Entity a, Entity b)
         {
             int heightA = a.Size.Y;
             int heightB = b.Size.Y;
@@ -149,6 +143,7 @@ namespace MFS
             {
                 return false;
             }
+
             Vector2 aHalfExtend = new Vector2(aRect.Width / 2f, aRect.Height / 2f);
             Vector2 bHalfExtend = new Vector2(bRect.Width / 2f, bRect.Height / 2f);
 
@@ -193,7 +188,6 @@ namespace MFS
                 }
 
                 offset.Y = -length;
-
             }
             return true;
         }
@@ -203,8 +197,9 @@ namespace MFS
             Entity entity = GetEntity(id);
             entity.Position += moveVector;
 
-
-            for (ushort i = 0; i < lastID; i++)
+            var keys = entities.Keys.ToList();
+            
+            foreach (ushort i in keys)
             {
                 Entity ent = GetEntity(i);
                 if (ent == null)
@@ -216,24 +211,20 @@ namespace MFS
                     Vector2 offset;
                     if (CollisionDetection(entity, ent, out offset))
                     {
-                        if (ent is Prop)
+                        if (ent is Item && entity is Player)
                         {
-                            Prop prop = ent as Prop; //(Prop)ent can throw exception, as  ent as Prop will return null
                             Player player = entity as Player;
-                            if (prop.PropType == PropType.PICKUP)
+                            Item item = ent as Item;
+
+                            if (player.GetInventory().AddItem(item))
                             {
-                                //TODO: pickup collision (add to inventory)
                                 RemoveEntity(i);
-                                player.AddToInventory(prop);
-                            }
-                            else if (prop.PropType == PropType.SOLID)
-                            {
-                                entity.Position += offset;
                             }
                         }
-                        else
+                        else if (ent is Prop)
                         {
-                            entity.Position -= offset;
+                           // Prop prop = ent as Prop;
+                            entity.Position += offset;
                         }
                         break;
                     }

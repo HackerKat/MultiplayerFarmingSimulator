@@ -26,12 +26,14 @@ namespace MFS
 
         public void LoadTiles()
         {
+            ushort spriteID = SpriteManager.Instance.GetSpriteIDByName("background");
+
             for (int x = 0; x < 11; x++)
             {
                 for (int y = 0; y < 2; y++)
                 {
                     Point frame = new Point(x, y);
-                    Tile tile = new Tile(3, frame);
+                    Tile tile = new Tile(spriteID, frame);
                     availableTiles.Add(tile);
                 }
             }
