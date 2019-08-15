@@ -155,12 +155,6 @@ namespace MFS
             world.Draw(spriteBatch);
 
             entityManager.Draw(spriteBatch);
-
-            //button.Visible = true;
-
-            ////Draw font
-            //spriteBatch.DrawString(text, "Welcome to my game", new Vector2(10, 10), Color.Red,
-            //    0, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
 
         protected override void Update(GameTime gameTime)
@@ -197,10 +191,8 @@ namespace MFS
             }
 
             spriteBatch.End();
-
-            // GeonBit.UI: draw UI using the spriteBatch you created above
+            
             ui.EndDraw(spriteBatch);
-           // UserInterface.Active.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

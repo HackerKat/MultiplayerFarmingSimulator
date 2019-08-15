@@ -24,7 +24,6 @@ namespace MFS
 
         private GBBtutton inventoryButton;
         private Panel inventoryPanel;
-        private Panel ingamePanel;
 
         public delegate void HostButtonOnClick();
         public delegate void ConnectButtonOnClick(string ipAdress);

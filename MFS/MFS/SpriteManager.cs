@@ -67,6 +67,24 @@ namespace MFS
             //tomatoID151
             Sprite tomato = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/tomato"), new Point(32, 25));
 
+            //potatooID152
+            Sprite potato = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/potato"), new Point(32, 32));
+
+            //artischokeID153
+            Sprite artischoke = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/artischoke"), new Point(32, 32));
+
+            //carrotID154
+            Sprite carrot = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/carrot"), new Point(32, 32));
+
+            //cornID155
+            Sprite corn = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/corn"), new Point(32, 32));
+
+            //paprikaID156
+            Sprite paprika = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/paprika"), new Point(32, 32));
+
+            //zucchiniID157
+            Sprite zucchini = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/zucchini"), new Point(32, 32));
+
             //swordID201
             Sprite axe = new Sprite(Game.Content.Load<Texture2D>(@"Images/Items/sword"), new Point(32, 32));
 
@@ -76,10 +94,13 @@ namespace MFS
             //missingSpriteID65535
             Sprite missingSprite = new Sprite(Game.Content.Load<Texture2D>(@"TESTCUBE"), new Point(32, 32));
 
+            //Player Sprites
             sprites.Add(1, playerSprite);
             lookupSpriteTable.Add("playerSprite", 1);
+            //Background sprite
             sprites.Add(0, background);
             lookupSpriteTable.Add("background", 0);
+            //Tree sprites
             sprites.Add(11, treealive1);
             lookupSpriteTable.Add("treealive1", 11);
             sprites.Add(12, treealive2);
@@ -90,14 +111,31 @@ namespace MFS
             lookupSpriteTable.Add("treestump1", 14);
             sprites.Add(15, treedead1);
             lookupSpriteTable.Add("treedead1", 15);
+            //house sprite
             sprites.Add(10, house);
             lookupSpriteTable.Add("house", 10);
-            sprites.Add(101, tomato);
-            lookupSpriteTable.Add("tomato", 101);
+            //Vegetables sprites
+            sprites.Add(151, tomato);
+            lookupSpriteTable.Add("tomato", 151);
+            sprites.Add(152, potato);
+            lookupSpriteTable.Add("potato", 152);
+            sprites.Add(153, artischoke);
+            lookupSpriteTable.Add("artischoke", 153);
+            sprites.Add(154, carrot);
+            lookupSpriteTable.Add("carrot", 154);
+            sprites.Add(155, corn);
+            lookupSpriteTable.Add("corn", 155);
+            sprites.Add(156, paprika);
+            lookupSpriteTable.Add("paprika", 156);
+            sprites.Add(157, zucchini);
+            lookupSpriteTable.Add("zucchini", 157);
             sprites.Add(201, axe);
+            //Tools sprite
             lookupSpriteTable.Add("axe", 201);
+            //Resources sprite
             sprites.Add(251, woodlog);
             lookupSpriteTable.Add("woodlog", 251);
+            //Debug sprites
             sprites.Add(ushort.MaxValue, missingSprite);
             lookupSpriteTable.Add("missingSprite", ushort.MaxValue);
         }
