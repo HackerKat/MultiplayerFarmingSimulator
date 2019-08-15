@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MFS
 {
-    //TODO: Player in Network player, and player shoukd be deleted
+    //TODO: Player in Network player, and player should be deleted
     public class NetworkPlayer : Entity
     {
         public NetworkPlayer(Vector2 position, ushort spriteID)

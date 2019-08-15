@@ -28,24 +28,20 @@ namespace MFS
         private NetworkManager networkManager;
         private SpriteFont text;
         private GameState state;
-        private string hostname;
         private Button startHost;
         private Button startClient;
         private Parser parser;
         private GBBtutton inventoryButton;
         private Panel inventoryPanel;
+        private UI ui;
 
-        public Game1(string hostname)
+        public Game1()
         {
-            this.hostname = hostname;
             string path = @"map_2.json";
-            //string path = @"D:\Documents\University\Bachelor\MultiplayerFarmingSimulator\MFS\MFS\testmap.json";
             parser = new Parser(path);
             graphics = new GraphicsDeviceManager(this);
 
             graphics.PreferredBackBufferWidth = parser.GetMapWidth();  // set this value to the desired width of your window
-            Console.WriteLine(parser.GetMapWidth());
-            Console.WriteLine(parser.GetMapHeight());
             graphics.PreferredBackBufferHeight = parser.GetMapHeight();   // set this value to the desired height of your window
             graphics.ApplyChanges();
             
@@ -54,18 +50,6 @@ namespace MFS
 
         protected override void Initialize()
         {
-            UserInterface.Initialize(Content, BuiltinThemes.hd);
-
-            inventoryButton = new GBBtutton("Inventory", anchor: Anchor.BottomRight,  size: new Vector2(300, 50));
-            inventoryButton.Visible = false;
-            inventoryButton.ToggleMode = true;
-            inventoryButton.OnValueChange = OpenInventory;
-            UserInterface.Active.AddEntity(inventoryButton);
-
-            inventoryPanel = new Panel(new Vector2(300, 300));
-            inventoryPanel.Visible = false;
-            UserInterface.Active.AddEntity(inventoryPanel);
-
             spriteManager = SpriteManager.Instance;
             entityManager = EntityManager.Instance;
             spriteManager.Game = this;
@@ -84,8 +68,6 @@ namespace MFS
             parser.ParseJson();
             Player player = new Player( new Vector2(300, 300), 1);
 
-            Texture2D buttonTexture = Content.Load<Texture2D>(@"Images\UI\button3");
-
             ushort entityID;
 
             entityID = entityManager.AddEntity(player);
@@ -95,14 +77,11 @@ namespace MFS
             world.LoadTiles();
             world.GenerateWorld();
 
-            int padding = 10;
-            int centerX = Window.ClientBounds.Width / 2;
-            int centerY = Window.ClientBounds.Height / 2;
-
-            startHost = new Button("Host game", centerX - 50, centerY - 40 - padding, 100, 40, StartHost, buttonTexture);
-            startClient = new Button("Connect", centerX - 50, centerY - padding, 100, 40, StartClient, buttonTexture);
-
-            text = Content.Load<SpriteFont>(@"font\text");
+            ui = new UI(Content);
+            ui.OnHost += StartHost;
+            ui.OnConnect += StartClient;
+            ui.OnInventory += OpenInventory;
+            ui.EnableStartScreen();
         }
 
         protected override void UnloadContent()
@@ -110,61 +89,53 @@ namespace MFS
            
         }
 
-        private void OpenInventory(GBEntity entity)
+        private void OpenInventory(Panel inventoryPanel)
         {
-            if (inventoryButton.Checked)
+            inventoryPanel.ClearChildren();
+            ushort playerid = entityManager.PlayerID;
+            Player player = (Player)entityManager.GetEntity(playerid);
+
+            List<Item> inventory = player.GetInventory().GetAllItems();
+
+            foreach (Item item in inventory)
             {
-                inventoryPanel.ClearChildren();
-                ushort playerid = entityManager.PlayerID;
-                Player player = (Player)entityManager.GetEntity(playerid);
+                ushort spriteid = item.SpriteID;
+                Sprite sprite = spriteManager.GetSprite(spriteid);
+                Image img = sprite.GetImage();
 
-                List<Item> inventory = player.GetInventory().GetAllItems();
+                img.OnClick += (GBEntity ent) => item.Use();
 
-                foreach (Item item in inventory)
-                {
-                    ushort spriteid = item.SpriteID;
-                    Sprite sprite = spriteManager.GetSprite(spriteid);
-                    Image img = sprite.GetImage();
-
-                    img.OnClick += (GBEntity ent) => item.Use();
-
-                    inventoryPanel.AddChild(img);
-                }
-                inventoryPanel.Visible = true;
+                inventoryPanel.AddChild(img);
             }
-            else
-            {
-                inventoryPanel.Visible = false;
-            }
+            
         }
 
         private void UpdateMainMenu()
         {
-            startHost.Update();
-            startClient.Update();
+            
         }
 
         private void StartHost()
         {
             networkManager.StartHost();
             state = GameState.GAMEPLAY;
-
-            inventoryButton.Visible = true;
+            ui.DissableStartScreen();
+            ui.EnableInGameUI();
         }
 
-        private void StartClient()
+        private void StartClient(string hostname)
         {
             networkManager.StartClient(hostname);
             state = GameState.GAMEPLAY;
-
-            inventoryButton.Visible = true;
+            ui.DissableStartScreen();
+            ui.EnableInGameUI();
         }
 
         private void DrawMainMenu()
         {
-            this.IsMouseVisible = true;
-            startHost.Draw(spriteBatch, text);
-            startClient.Draw(spriteBatch, text);
+            this.IsMouseVisible = false;
+            //startHost.Draw(spriteBatch, text);
+            //startClient.Draw(spriteBatch, text);
         }
 
         private void UpdateGameplay(GameTime gameTime)
@@ -211,6 +182,7 @@ namespace MFS
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            ui.BeginDraw(spriteBatch);
 
             spriteBatch.Begin();
 
@@ -227,7 +199,8 @@ namespace MFS
             spriteBatch.End();
 
             // GeonBit.UI: draw UI using the spriteBatch you created above
-            UserInterface.Active.Draw(spriteBatch);
+            ui.EndDraw(spriteBatch);
+           // UserInterface.Active.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

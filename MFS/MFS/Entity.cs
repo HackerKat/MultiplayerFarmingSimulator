@@ -56,7 +56,7 @@ namespace MFS
             private set
             {
                 size = value;
-                CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X, size.Y);
+                CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X - OFFSET, size.Y - OFFSET);
             }
         }
         protected Rectangle collisionRect;
@@ -79,6 +79,7 @@ namespace MFS
                 return entityType;
             }
         }
+        private const int OFFSET = 10;
 
         public Entity(EntityType entityType, Vector2 position, ushort spriteID)
         {
@@ -88,8 +89,7 @@ namespace MFS
 
             Size = SpriteManager.Instance.GetSprite(spriteID).FrameSize;
 
-            int offset = 10; //gives a more realistic collider box
-            CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X - offset, size.Y - offset);
+            CollisionRect = new Rectangle((int)position.X, (int)position.Y, size.X - OFFSET, size.Y - OFFSET);
         }
 
         public virtual void BoundsCheck(Rectangle clientBounds)

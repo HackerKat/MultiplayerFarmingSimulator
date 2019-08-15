@@ -25,14 +25,14 @@ namespace MFS
 #if DEBUG
             AllocConsole();
 #endif
-            string hostname = "127.0.0.1";
-            if (args.Length == 1)
-            {
-                hostname = args[0];
-            }
+            //string hostname = "127.0.0.1";
+            //if (args.Length == 1)
+            //{
+            //    hostname = args[0];
+            //}
 
             //TODO: what does run() does specifically
-            using (var game = new Game1(hostname))
+            using (var game = new Game1())
                 game.Run();
         }
     }
