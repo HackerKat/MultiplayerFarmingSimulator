@@ -28,9 +28,11 @@ namespace MFS
         {
             ushort spriteID = SpriteManager.Instance.GetSpriteIDByName("background");
 
-            for (int x = 0; x < 11; x++)
+            Point sheetSize = SpriteManager.Instance.GetSprite(spriteID).SheetSize;
+
+            for (int x = 0; x < sheetSize.X; x++)
             {
-                for (int y = 0; y < 2; y++)
+                for (int y = 0; y < sheetSize.Y; y++)
                 {
                     Point frame = new Point(x, y);
                     Tile tile = new Tile(spriteID, frame);

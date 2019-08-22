@@ -41,9 +41,12 @@ namespace MFS
             //playerID1
             Sprite playerSprite = new Sprite(Game.Content.Load<Texture2D>(@"Images/AnimatedSprites/mani-idle-run"),
                                              new Point(24, 24), new Point(7, 1), 5);
-            
+
             //backgroundID0
-            Sprite background = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/grasstiles2"), new Point(32, 32), new Point(2, 1), 0);
+            Sprite background = new Sprite(Game.Content.Load<Texture2D>(@"Images/Background/grasstiles3"), new Point(32, 32), new Point(3, 1), 0);
+
+            //backgroundID0
+            //Sprite background = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/grasstiles2"), new Point(32, 32), new Point(2, 1), 0);
 
             //treealive1ID11
             Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(56,64));

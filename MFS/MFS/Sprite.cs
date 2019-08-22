@@ -8,6 +8,13 @@ namespace MFS {
     {
         private Texture2D textureImage;
         private Point sheetSize;
+        public Point SheetSize
+        {
+            get
+            {
+                return sheetSize;
+            }
+        }
         private int millisecondsPerFrame;
         private Point currentFrame;
         public Point CurrentFrame
