@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MFS
 {
-    public class InputManager
+    public sealed class InputManager
     {
         public ushort EntityToControlID
         {
@@ -59,11 +59,6 @@ namespace MFS
                 player.Direction = Vector2.Normalize(inputDirection);
             }
 
-            if (newState.IsKeyDown(Keys.E) && oldState.IsKeyUp(Keys.E))
-            {
-                Player player = (Player)entity;
-                //player.SwingAxe();
-            }
             oldState = newState;
         }
     }

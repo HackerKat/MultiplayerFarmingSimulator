@@ -10,18 +10,12 @@ namespace MFS
 {
     public class Axe : Item
     {
-        public const float MIN_DISTANCE = 64f;
+        private const float MIN_DISTANCE = 64f;
 
         public Axe (Vector2 position, ushort spriteID)
             :base (EntityType.AXE, position, spriteID)
         {
 
-        }
-
-        public void SwingAxe()
-        {
-            var entities = EntityManager.Instance.GetAllEntities();
-            //if ()
         }
 
         public override void Use()
@@ -52,7 +46,6 @@ namespace MFS
 
             if (shortestDistance <= MIN_DISTANCE)
             {
-                Console.WriteLine("ME CHOP");
                 player.GetInventory().AddItem(new Resource(Vector2.Zero, 251));
 
                 entityManager.RemoveEntity(closestTree, true);

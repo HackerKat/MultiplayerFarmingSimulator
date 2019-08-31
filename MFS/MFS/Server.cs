@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace MFS
 {
-    class Server
+    public class Server
     {
         private NetServer server;
         private NetPeerConfiguration config;
@@ -24,18 +24,18 @@ namespace MFS
             server.Start();
         }
 
-        public void SendPositionUpdate(NetIncomingMessage msg)
+        private void ReceiveAndSendPositionUpdate(NetIncomingMessage msg)
         {
             ushort id = msg.ReadUInt16();
             Entity entity = EntityManager.Instance.GetEntity(id);
 
             entity.UnpackPacket(msg);
 
-            var outMsg = PacketPositionUpdate(id, entity);
+            var outMsg = PackPositionUpdate(id, entity);
             server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
 
-        public NetOutgoingMessage PacketPositionUpdate(ushort id, Entity entity)
+        private NetOutgoingMessage PackPositionUpdate(ushort id, Entity entity)
         {
             NetOutgoingMessage outMsg = server.CreateMessage();
             outMsg.Write((byte)PacketType.POSITION_UPDATE);
@@ -44,9 +44,9 @@ namespace MFS
             return outMsg;
         }
 
-        public void InitialSetup(NetIncomingMessage msg)
+        private void SendInitialSetup(NetIncomingMessage helloMsg)
         {
-            NetworkPlayer netPlayer = new NetworkPlayer(new Vector2(500, 500), 1);
+            Player newPlayer = new Player(new Vector2(500, 500), 1);
             NetOutgoingMessage outMsg = server.CreateMessage();
             var entities = EntityManager.Instance.GetAllEntities();
             outMsg.Write((byte)PacketType.INITIAL_SETUP);
@@ -56,31 +56,30 @@ namespace MFS
             {
                 ushort id = element.Key;
                 Entity entity = element.Value;
-                Console.WriteLine(id);
 
                 outMsg.Write(id);
                 outMsg.Write((Byte)entity.EntityType);
                 entity.PackPacket(outMsg);
             }
 
-            ushort netPlayerID = EntityManager.Instance.AddEntity(netPlayer);
+            ushort netPlayerID = EntityManager.Instance.AddEntity(newPlayer);
             outMsg.Write(netPlayerID);
-            server.SendMessage(outMsg, msg.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+            server.SendMessage(outMsg, helloMsg.SenderConnection, NetDeliveryMethod.ReliableOrdered);
             AddPlayer(netPlayerID);
         }
         
-        public void AddPlayer(ushort netPlayerID)
+        private void AddPlayer(ushort netPlayerID)
         {
             NetOutgoingMessage outMsg = server.CreateMessage();
-            NetworkPlayer netPlayer = (NetworkPlayer)EntityManager.Instance.GetEntity(netPlayerID);
+            Player newPlayer = (Player)EntityManager.Instance.GetEntity(netPlayerID);
 
             outMsg.Write((byte)PacketType.ADD_PLAYER);
             outMsg.Write(netPlayerID);
-            netPlayer.PackPacket(outMsg);
+            newPlayer.PackPacket(outMsg);
             server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
 
-        public void UpdatePosition()
+        private void SendOwnPositionUpdate()
         {
             ushort id = EntityManager.Instance.PlayerID;
             Entity entity = EntityManager.Instance.GetEntity(id);
@@ -95,7 +94,7 @@ namespace MFS
             server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
 
-        public void RemoveEntity()
+        private void SendOwnRemoveEntity()
         {
             var deletedIDs = EntityManager.Instance.DeletedIDs;
             
@@ -106,7 +105,7 @@ namespace MFS
                     NetOutgoingMessage outMsg = null;
                     outMsg = server.CreateMessage();
 
-                    outMsg.Write((byte)PacketType.REMOVE_PROP);
+                    outMsg.Write((byte)PacketType.REMOVE_ENTITY);
                     outMsg.Write(deletedID);
                     server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
                 }
@@ -114,7 +113,7 @@ namespace MFS
             }
         }
 
-        public void RemoveProp(NetIncomingMessage msg)
+        private void ReceiveAndSendRemoveEntity(NetIncomingMessage msg)
         {
             ushort propid = msg.ReadUInt16();
             EntityManager.Instance.RemoveEntity(propid, false);
@@ -122,7 +121,7 @@ namespace MFS
             NetOutgoingMessage outMsg = null;
             outMsg = server.CreateMessage();
 
-            outMsg.Write((byte)PacketType.REMOVE_PROP);
+            outMsg.Write((byte)PacketType.REMOVE_ENTITY);
             outMsg.Write(propid);
             server.SendToAll(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
@@ -141,13 +140,13 @@ namespace MFS
                             switch (type)
                             {
                                 case PacketType.POSITION_UPDATE:
-                                    SendPositionUpdate(msg);
+                                    ReceiveAndSendPositionUpdate(msg);
                                     break;
-                                case PacketType.REMOVE_PROP:
-                                    RemoveProp(msg);
+                                case PacketType.REMOVE_ENTITY:
+                                    ReceiveAndSendRemoveEntity(msg);
                                     break;
                                 case PacketType.HELLO:
-                                    InitialSetup(msg);
+                                    SendInitialSetup(msg);
                                     break;
                             }
                         }
@@ -155,8 +154,8 @@ namespace MFS
                 }
                 server.Recycle(msg);
             }
-            UpdatePosition();
-            RemoveEntity();
+            SendOwnPositionUpdate();
+            SendOwnRemoveEntity();
         }
     }
 }

@@ -16,10 +16,10 @@ namespace MFS
         ADD_PLAYER,
         POSITION_UPDATE,
         REMOVE_PLAYER,
-        REMOVE_PROP
+        REMOVE_ENTITY
     };
 
-    public class NetworkManager
+    public sealed class NetworkManager
     {
         private NetPeerConfiguration config;
         private Server server;

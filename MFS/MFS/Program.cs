@@ -11,7 +11,6 @@ namespace MFS
     {
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        //TODO: How to show it in uml?
         static extern bool AllocConsole();
 
         /// <summary>
@@ -25,13 +24,6 @@ namespace MFS
 #if DEBUG
             AllocConsole();
 #endif
-            //string hostname = "127.0.0.1";
-            //if (args.Length == 1)
-            //{
-            //    hostname = args[0];
-            //}
-
-            //TODO: what does run() does specifically
             using (var game = new Game1())
                 game.Run();
         }

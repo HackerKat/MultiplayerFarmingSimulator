@@ -2,13 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
+
 // using GeonBit UI elements
 using GeonBit.UI;
 using GeonBit.UI.Entities;
-
-using GBBtutton = GeonBit.UI.Entities.Button;
 using GBEntity = GeonBit.UI.Entities.Entity;
-using System.Collections.Generic;
 
 namespace MFS
 {
@@ -28,10 +27,7 @@ namespace MFS
         private NetworkManager networkManager;
         private SpriteFont text;
         private GameState state;
-        private Button startHost;
-        private Button startClient;
         private Parser parser;
-        private GBBtutton inventoryButton;
         private Panel inventoryPanel;
         private UI ui;
 
@@ -86,7 +82,6 @@ namespace MFS
 
         protected override void UnloadContent()
         {
-           
         }
 
         private void OpenInventory(Panel inventoryPanel)
@@ -107,12 +102,10 @@ namespace MFS
 
                 inventoryPanel.AddChild(img);
             }
-            
         }
 
         private void UpdateMainMenu()
         {
-            
         }
 
         private void StartHost()
@@ -134,14 +127,13 @@ namespace MFS
         private void DrawMainMenu()
         {
             this.IsMouseVisible = false;
-            //startHost.Draw(spriteBatch, text);
-            //startClient.Draw(spriteBatch, text);
         }
 
         private void UpdateGameplay(GameTime gameTime)
         {
             InputManager.Instance.HandleInput();
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             Rectangle clientBounds = this.Window.ClientBounds;
@@ -159,7 +151,7 @@ namespace MFS
 
         protected override void Update(GameTime gameTime)
         {
-            // GeonBit.UIL update UI manager
+            // GeonBit.UI update UI manager
             UserInterface.Active.Update(gameTime);
             switch (state)
             {

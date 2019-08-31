@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 namespace MFS
 {
-    //with XNA it should be Microsoft.Xna.Framework.DrawableGameComponent
-    public class SpriteManager
+    public sealed class SpriteManager
     {
         public static SpriteManager Instance
         {
@@ -23,7 +22,6 @@ namespace MFS
 
         private Dictionary<string, ushort> lookupSpriteTable;
         private Dictionary <ushort, Sprite> sprites;
-        //TODO: shouldn't it be private?
         public Game Game
         {
             get;
@@ -43,10 +41,7 @@ namespace MFS
                                              new Point(24, 24), new Point(7, 1), 5);
 
             //backgroundID0
-            Sprite background = new Sprite(Game.Content.Load<Texture2D>(@"Images/Background/grasstiles3"), new Point(32, 32), new Point(3, 1), 0);
-
-            //backgroundID0
-            //Sprite background = new Sprite (Game.Content.Load<Texture2D>(@"Images/Background/grasstiles2"), new Point(32, 32), new Point(2, 1), 0);
+            Sprite background = new Sprite(Game.Content.Load<Texture2D>(@"Images/Background/grasstiles8"), new Point(32, 32), new Point(4, 2), 0);
 
             //treealive1ID11
             Sprite treealive1 = new Sprite(Game.Content.Load<Texture2D>(@"Images/Trees/treealive1"), new Point(56,64));
@@ -65,8 +60,7 @@ namespace MFS
 
             //houseID10
             Sprite house = new Sprite(Game.Content.Load<Texture2D>(@"Images/House/House"), new Point(100, 100));
-
-            //TODO: add more vegetables and tools and adjust their IDs
+            
             //tomatoID151
             Sprite tomato = new Sprite(Game.Content.Load<Texture2D>(@"Images/Plants/tomato"), new Point(32, 25));
 

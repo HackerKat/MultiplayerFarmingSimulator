@@ -9,18 +9,13 @@ namespace MFS
 {
     public class Resource : Item
     {
-        private Vector2 zero;
-        private int v;
-
         public Resource(Vector2 position, ushort spriteID)
             :base(EntityType.RESOURCE, position, spriteID)
         {
-
         }
 
         public override void Use()
         {
-            throw new NotImplementedException();
         }
     }
 }

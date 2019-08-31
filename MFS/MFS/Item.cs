@@ -9,9 +9,6 @@ namespace MFS
 {
     public abstract class Item : Entity
     {
-        //TODO: impement price
-        //protected int price;
-
         public Item (EntityType type, Vector2 position, ushort spriteID)
             : base(type, position, spriteID)
         {

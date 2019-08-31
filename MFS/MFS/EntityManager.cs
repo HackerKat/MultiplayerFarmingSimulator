@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MFS
 {
-    public class EntityManager
+    public sealed class EntityManager
     {
         public static EntityManager Instance
         {
@@ -132,7 +132,7 @@ namespace MFS
             return 1;
         }
 
-        public bool CollisionDetection(Entity a, Entity b, out Vector2 offset)
+        private bool CollisionDetection(Entity a, Entity b, out Vector2 offset)
         {
             offset = Vector2.Zero;
             
@@ -223,7 +223,6 @@ namespace MFS
                         }
                         else if (ent is Prop)
                         {
-                           // Prop prop = ent as Prop;
                             entity.Position += offset;
                         }
                         break;

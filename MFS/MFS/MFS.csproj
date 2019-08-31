@@ -48,7 +48,6 @@
     <Compile Include="Inventory.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="NetworkManager.cs" />
-    <Compile Include="NetworkPlayer.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Server.cs" />

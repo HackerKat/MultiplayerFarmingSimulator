@@ -64,7 +64,6 @@ namespace MFS
             inventoryPanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
             inventoryPanel.Visible = false;
 
-
             inventoryButton = new GBBtutton("Inventory", skin: ButtonSkin.Alternative, anchor: Anchor.BottomRight, size: new Vector2(300, 50));
             inventoryButton.ToggleMode = true;
             inventoryButton.OnValueChange = OpenInventory;
@@ -107,15 +106,17 @@ namespace MFS
 
         public void DissableInGameUI()
         {
-
         }
-        
 
         public void ConnectToHost(GBEntity btn)
         {
             if (OnConnect != null)
             {
                 string ipAdress = input.Value;
+                if (ipAdress == string.Empty)
+                {
+                    ipAdress = "127.0.0.1";
+                }
                 OnConnect(ipAdress);
             }
         }
@@ -126,11 +127,6 @@ namespace MFS
             {
                 OnHost();
             }
-        }
-
-        public void CreateInventory()
-        {
-
         }
 
         public void BeginDraw(SpriteBatch spriteBatch)

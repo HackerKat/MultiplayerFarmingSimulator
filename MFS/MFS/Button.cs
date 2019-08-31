@@ -65,7 +65,6 @@ namespace MFS
         {
             spriteBatch.Draw(texture, new Vector2(buttonX, buttonY), Color.White);
 
-
             //Draw font
             int margin = 10;
 

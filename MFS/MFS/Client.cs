@@ -7,10 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-//TODO: Major refactor of Client/Server (method renaming and delete all unnecessray methods)
 namespace MFS
 {
-    class Client
+    public class Client
     {
         private NetClient client;
         private bool connected;
@@ -44,7 +43,7 @@ namespace MFS
             client.SendMessage(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
         
-        public void ReceivePosition(NetIncomingMessage msg)
+        private void ReceivePositionUpdate(NetIncomingMessage msg)
         {
             ushort id = msg.ReadUInt16();
             Entity entity = EntityManager.Instance.GetEntity(id);
@@ -54,7 +53,7 @@ namespace MFS
             }
         }
 
-        public void UpdatePosition()
+        private void SendOwnPositionUpdate()
         {
             ushort id = EntityManager.Instance.PlayerID;
             Entity entity = EntityManager.Instance.GetEntity(id);
@@ -70,7 +69,7 @@ namespace MFS
             client.SendMessage(outMsg, NetDeliveryMethod.ReliableOrdered);
         }
 
-        public void InitialSetup(NetIncomingMessage msg)
+        private void ReceiveInitialSetup(NetIncomingMessage msg)
         {
             EntityManager.Instance.Clear();
             int count = msg.ReadInt32();
@@ -91,7 +90,7 @@ namespace MFS
                         break;
                     case EntityType.PLAYER:
                         {
-                            NetworkPlayer netp = new NetworkPlayer(Vector2.Zero, 1);
+                            Player netp = new Player(Vector2.Zero, 1);
                             netp.UnpackPacket(msg);
                             EntityManager.Instance.AddEntity(netp, id);
                         }
@@ -116,13 +115,13 @@ namespace MFS
             AddSelf(msg);
         }
 
-        public void RemoveProp(NetIncomingMessage msg)
+        private void ReceiveRemoveEntity(NetIncomingMessage msg)
         {
             ushort propid = msg.ReadUInt16();
             EntityManager.Instance.RemoveEntity(propid, false);
         }
 
-        public void AddSelf(NetIncomingMessage msg)
+        private void AddSelf(NetIncomingMessage msg)
         {
             ushort netid = msg.ReadUInt16();
             Player player = new Player(new Vector2(500, 500), 1);
@@ -132,10 +131,10 @@ namespace MFS
             InputManager.Instance.EntityToControlID = netid;
         }
 
-       //TODO: when second player is added, position of first and second player changes!
-        public void AddNetworkPlayer(NetIncomingMessage msg)
+       //TODO: when second player is added, position of first and second player changes
+        private void AddNewRemotePlayer(NetIncomingMessage msg)
         {
-            NetworkPlayer newPlayer = new NetworkPlayer(new Vector2(100, 100), 1);
+            Player newPlayer = new Player(new Vector2(100, 100), 1);
             ushort id = msg.ReadUInt16();
             if (id != EntityManager.Instance.PlayerID)
             {
@@ -144,8 +143,7 @@ namespace MFS
             }
         }
 
-        //TODO: should be public?
-        private void RemoveEntity()
+        private void SendOwnRemoveEntity()
         {
             var deletedIDs = EntityManager.Instance.DeletedIDs;
 
@@ -156,7 +154,7 @@ namespace MFS
                     NetOutgoingMessage outMsg = null;
                     outMsg = client.CreateMessage();
 
-                    outMsg.Write((byte)PacketType.REMOVE_PROP);
+                    outMsg.Write((byte)PacketType.REMOVE_ENTITY);
                     outMsg.Write(deletedID);
 
                     client.SendMessage(outMsg, NetDeliveryMethod.ReliableOrdered);
@@ -180,17 +178,17 @@ namespace MFS
                             case PacketType.POSITION_UPDATE:
                                 if (clientInitialized)
                                 {
-                                    ReceivePosition(msg);
+                                    ReceivePositionUpdate(msg);
                                 }
                                 break;
-                            case PacketType.REMOVE_PROP:
-                                    RemoveProp(msg);
+                            case PacketType.REMOVE_ENTITY:
+                                    ReceiveRemoveEntity(msg);
                                     break;
                             case PacketType.ADD_PLAYER:
-                                AddNetworkPlayer(msg);
+                                AddNewRemotePlayer(msg);
                                 break;
                             case PacketType.INITIAL_SETUP:
-                                InitialSetup(msg);
+                                ReceiveInitialSetup(msg);
                                 break;
                         }
                     }
@@ -200,8 +198,8 @@ namespace MFS
             }
             if (clientInitialized)
             {
-                UpdatePosition();
-                RemoveEntity();
+                SendOwnPositionUpdate();
+                SendOwnRemoveEntity();
             }
         }
     }

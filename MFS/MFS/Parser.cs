@@ -67,7 +67,6 @@ namespace MFS
                                     Kind propKind = (Kind) Enum.Parse(typeof(Kind), kind);
                                     prop.Kind = propKind;
                                     EntityManager.Instance.AddEntity(prop);
-                                    Console.WriteLine(prop.Kind);
                                 }
                                 break;
                             case EntityType.PLAYER:
